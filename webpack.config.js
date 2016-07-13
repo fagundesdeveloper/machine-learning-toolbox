@@ -1,10 +1,3 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin')
-var HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
-  template: __dirname + '/food_hack/index.html',
-  filename: 'index.html',
-  inject: 'body'
-})
-
 module.exports = {
   entry: [
     './food_hack/index.js'
@@ -13,14 +6,34 @@ module.exports = {
     path: __dirname + '/public',
     filename: 'bundle.js'
   },
-  module: {
-    loaders: [{
-      exclude: /node_modules/,
-      loader: 'babel-loader'
-    }]
-  },
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
-  plugins: [HTMLWebpackPluginConfig]
+  module: {
+    loaders: [{
+      exclude: /node_modules/,
+      test: /\.js|\.jsx$/,
+      loaders: ['babel']
+    }
+  }
 }
+
+/*
+
+HERES A GOOD IDEA, REMMEBER THAT BIT YOU TOLD KENRICK ABOUT, HOW COULD 
+WE DO THAT WITH CODE, IT'S LIKE THAT STORY YOU WRITE TO PASS THE TIME is
+CLASS, ONE PERSON STARTS, ANOTHER TAKES IT IN AN ENTIRELY NEW DIRECTION, 
+BU CODE IS HARDER, IT NEEDS A STRUCTURE, A SET OF RULES TO MAKE EVERYTHING 
+WORK TOGETHER AT THE END, BUT THERE COULD BE SOMETHING THAT MAKES IT ALL WORK, ONE
+THING THAT WORKS IS IF WE HAVE A DATASET, NOW WE COULD ALL BUILD VISUALIZATIONS FOR THE DATA SET,
+BUT WE COULD ALSO NOT HAVE THE SATA LABELLED UNTIL MUCH LATER, THIS WOULD THEN BE 
+PART OF THE REVEAL, WE COULD ALL INTERPRET IT IN OUR OWN WAYS
+------ I LIKE THE IDEA OF A HIDDEN COMPONENT LIKE A MYSTERY BOX, WHAT IF PEOPLE CREATE SOMEHTING, LIKE A
+FUNCTION, AND THE FUNCTION CAN DO WHATEVER THEY WANT, BUT IT TAKES SOME KNOWN INPUT, 
+HERE VISUALIZATIONS MAKE SENSE AGIAN, MAYBE OSMETHING ELSE HAPPENS WITH THIS?? THIS IS NOT AMAZING
+BUT IT IS WORTH TRYING AND IT IS WORTH EXECUTING IF ONLY TO MEET PEOPLE,
+
+if it was a really wicked visualization or it parsed their data or something it could HAVE
+a super cool output
+
+*/
