@@ -1,0 +1,28 @@
+{
+  "name": "food_hack",
+  "version": "1.0.0",
+  "description": "An investigation into one man's deprivation of flavor at the hands of healthy, cheap foods that at most require boiled water — Edit",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/nohman20/hacking-food-cause-i-m-poor.git"
+  },
+  "keywords": [
+    "food",
+    "hack",
+    "node",
+    "javascript"
+  ],
+  "author": "nohman20",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nohman20/hacking-food-cause-i-m-poor/issues"
+  },
+  "homepage": "https://github.com/nohman20/hacking-food-cause-i-m-poor#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
