@@ -28,15 +28,15 @@
     "babel-preset-stage-0": "^6.5.0",
     "cross-env": "^1.0.6",
     "css-loader": "^0.23.1",
-    "html-webpack-plugin": "^2.7.1",
-    "style-loader": "^0.13.0",
-    "webpack": "^1.12.11",
-    "webpack-dev-server": "^1.14.1",
     "eslint": "^1.10.3",
     "eslint-plugin-babel": "^3.0.0",
     "eslint-plugin-react": "^3.11.3",
     "express": "^4.13.3",
-    "webpack": "^1.12.9"
+    "html-webpack-plugin": "^2.7.1",
+    "react-router": "^2.5.2",
+    "style-loader": "^0.13.0",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
     "d3": "^4.0.0-rc.2",
@@ -47,4 +47,3 @@
     "redux": "^3.5.2"
   }
 }
-
