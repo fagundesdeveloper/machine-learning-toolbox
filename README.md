@@ -14,4 +14,6 @@ componentWillUpdate
 componentDidUpdate
 Unmounting: componentWillUnmount
 
+Don’t use a router if you aren’t building a single-page application
+
 
