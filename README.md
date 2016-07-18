@@ -5,4 +5,13 @@ Webpack: Base configuration given. A better deepdive into Webpack: https://githu
 
 Stateless Functional Componenets should always be used unless you are using lifecylemethods or anything with this more than this.props
 
+Lifecycle Methods
+Mounting: componentWillMount
+componentDidMount
+Updating: componentWillReceiveProps
+shouldComponentUpdate
+componentWillUpdate
+componentDidUpdate
+Unmounting: componentWillUnmount
+
 
