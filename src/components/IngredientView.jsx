@@ -21,8 +21,9 @@ class Ingredient extends Component{
 				<legend>Nutrional Facts</legend>
 				Name:<br/>
 
-				<input type="text" name= "name" value="Nom nom"/><br/>
+				<input type="text" name= "name" defaultValue="Nom nom" onChange={this.handleChange}/><br/>
 				Price:<br/>
+
 				<input type="text" name="price" value="Cheap"/><br/>
 				Serving Size:<br/>
 
