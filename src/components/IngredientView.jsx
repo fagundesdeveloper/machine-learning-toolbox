@@ -1,6 +1,67 @@
-import React, {Component} from 'react'
+import React, {Component, PropTypes} from 'react'
+import { Link } from 'react-router';
 
 class Ingredient extends Component{
+	componentWillMount() {
+    	this.props.fetchPosts();
+  	}
+
+	render(){
+		const { facts, loading, error } = this.props.ingredientInformation;
+
+		if (this.props.loading){
+			return(
+				<div><h3>Loading</h3></div>
+				)
+		}
+		return(
+		
+
+
+	
+	return (
+      <div className="container">
+        <h1>Posts</h1>
+        <ul className="list-group">
+          {this.renderPosts(posts)}
+        </ul>
+      </div>
+    );
+	renderIngredient(information){
+		return 
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/* static contextTypes = {
 	// 	router: PropTypes.object
 	// }
@@ -14,6 +75,89 @@ class Ingredient extends Component{
 	// },
 	//use props to pass in disbale: true and onChange... so that one component can be used fof all
 	*/
+import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
+
+class PostsForm extends Component {
+  static contextTypes = {
+    router: PropTypes.object
+  };
+
+  componentWillMount() {
+    //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
+    //always reset that global state back to null when you REMOUNT
+     this.props.resetMe();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.newPost.post && !nextProps.newPost.error) {
+      this.context.router.push('/');
+    }
+  }
+
+  renderError(newPost) {
+    if(newPost && newPost.error && newPost.error.message) {
+      return (
+        <div className="alert alert-danger">
+          {newPost ? newPost.error.message : ''}
+        </div>
+      );
+    } else {
+      return <span></span>
+    }
+  }
+render() {
+    const {asyncValidating, fields: { title, categories, content }, handleSubmit, submitting, newPost } = this.props;
+
+    return (
+      <div className="container">
+      {this.renderError(newPost)}
+      <form onSubmit={handleSubmit(this.props.createPost.bind(this))}>
+        <div className={`form-group ${title.touched && title.invalid ? 'has-error' : ''}`}>
+          <label className="control-label">Title*</label>
+          <input type="text" className="form-control" {...title} />
+          <div className="help-block">
+            {title.touched ? title.error : ''}
+          </div>
+          <div className="help-block">
+            {asyncValidating === 'title'? 'validating..': ''}
+          </div>
+        </div>
+
+        <div className={`form-group ${categories.touched && categories.invalid ? 'has-error' : ''}`}>
+          <label className="control-label">Categories*</label>
+          <input type="text" className="form-control" {...categories} />
+          <div className="help-block">
+            {categories.touched ? categories.error : ''}
+          </div>
+        </div>
+-------------------------------
+	function IngredientView (props) {
+  const {
+    post,
+    isLoading,
+    isEditing,
+    handleOnEdit,s
+    handleOnSubmit
+  } = props
+
+
+
+	var Input = React.createClass({
+  getInitialState: function() {
+    return {typed: ''};
+  },
+  onChange: function(event) {
+    this.setState({typed: event.target.value});
+  },
+  render: function() {
+    return <div>
+        <input type="text" onChange={this.onChange()}/>  
+
+        You typed: <code>{this.state.typed}</code>
+      </div>
+  }
+
 	render(){
 		return(
 		<form>
