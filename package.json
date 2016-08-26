@@ -1,7 +1,7 @@
 {
-  "name": "food_hack",
+  "name": "agent_based",
   "version": "1.0.0",
-  "description": "An investigation into one man's deprivation of flavor at the hands of healthy, cheap foods that at most require boiled water — Edit",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server",
