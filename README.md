@@ -7,5 +7,8 @@ Different algorithims that inconvergent use
 1. Draw lines that trace an original line
 2. Based on intestines and things that fold in on each other, start with a circle, draw a node between them that is has some randomized position relative to the line. 
 
+<http://inconvergent.net/generative/sand-spline/>
+<http://www.complexification.net/gallery/machines/substrate/index.php>
+
 
 
