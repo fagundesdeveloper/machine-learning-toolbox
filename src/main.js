@@ -1,5 +1,31 @@
-//okay lets have some utility methods,
-/* we need a noise function, 
+//main import line and render and calls a single recursive function and the intial
+//config values for the two classes that are then passed
 
-we should have a class line button, everyother other function like noise should be 
-in a utilities library 
+import {Line} from './line.js';
+
+var canvas = document.getElementById('canvas');
+
+export var config = {
+	someShit: 
+
+	//will have initial values, 
+
+}
+
+
+export function draw() {
+    if (canvas.getContext){
+        var ctx = canvas.getContext('2d');
+    } else {
+        console.log("No canvas")
+        return -1;
+    }
+
+    var render = new RenderLine({
+
+    })
+
+    var line = new Line({
+
+    })
+    }
