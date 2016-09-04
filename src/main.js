@@ -7,7 +7,7 @@ var canvas = document.getElementById('canvas');
 
 export var config = {
 	someShit: 
-
+	//f
 	//will have initial values, 
 
 }
