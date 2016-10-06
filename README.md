@@ -7,6 +7,8 @@ Different algorithims that inconvergent use
 1. Draw lines that trace an original line
 2. Based on intestines and things that fold in on each other, start with a circle, draw a node between them that is has some randomized position relative to the line. 
 
+a bunch of snakes moving away from a central point within a bounded box
+
 
 
 
