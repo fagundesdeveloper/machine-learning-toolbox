@@ -6,7 +6,14 @@ import {Line} from './line.js';
 var canvas = document.getElementById('canvas');
 
 export var config = {
-	someShit: 
+	size: canvas.width,
+    direction: something,
+    stroke: 'black',
+    angle: 
+
+    get direction(){
+        return this.direction
+    },
 
 	//will have initial values, 
 
