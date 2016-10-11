@@ -1,19 +1,20 @@
 module.exports = {
-  entry: [
-    './src/index.js'
-  ],
+  entry: './src/main.js',
   output: {
-    path: __dirname + '/dist',
+    libraryTarget: 'var',
+    library: 'App',
+    path: './dist',
     filename: 'bundle.js'
   },
-  resolve: {
-    extensions: ['.js']
+  'babel': {
+    'presets': [
+      'es2015'
+    ]
   },
   module: {
     loaders: [
-      {test: /\.js|\.jsx$/, exclude: /node_modules/, loader: 'babel-loader'},
-      { test: /\.css$/, loader: 'style-loader!css-loader' }
+      { test: /\.js$/, loader: 'babel', exclude: /node_modules/ }
     ]
   }
- 
+
 }

@@ -2,20 +2,17 @@
   "name": "agent_based",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "bundle.js",
   "scripts": {
-    "start": "webpack-dev-server",
-    "prod": "webpack -p"
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "start": "webpack && webpack-dev-server"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/nohman20/hacking-food-cause-i-m-poor.git"
+    "url": "git@github.com:nohmapp/acme-for-now.git"
   },
   "keywords": [
-    "food",
-    "hack",
-    "node",
-    "javascript"
   ],
   "author": "nohman20",
   "license": "MIT",
@@ -24,7 +21,6 @@
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-stage-0": "^6.5.0",
-   
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.1"
   },
