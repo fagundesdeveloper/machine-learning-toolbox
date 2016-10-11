@@ -6,6 +6,7 @@ import {Line} from './line.js';
 var canvas = document.getElementById('canvas');
 
 export var config = {
+<<<<<<< HEAD
 	size: canvas.width,
     direction: something,
     stroke: 'black',
@@ -15,6 +16,10 @@ export var config = {
         return this.direction
     },
 
+=======
+	someShit: 
+	//f
+>>>>>>> c31f7eb48b9d014498fc8964821ecf5015fc21a5
 	//will have initial values, 
 
 }
