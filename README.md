@@ -1,14 +1,8 @@
-Read more incorvergent work, but here are a couple major themes
--start with a base shape or line
-- draw another, whether node, pixel, or line
-- hae a rule and a place for randomization
-f
-Different algorithims that inconvergent use
-1. Draw lines that trace an original line
-2. Based on intestines and things that fold in on each other, start with a circle, draw a node between them that is has some randomized position relative to the line. 
+Outline on Prim's Algorithim
 
-a bunch of snakes moving away from a central point within a bounded box
+------
+Use a prims algorithim with additional direction that it must turn 90 degrees or fill space with a paticular orientation, this may look similar to the gut like inconvergent generated piece
 
+Also could I apply simple computer visoin to a blacka and white ellular automat piece to find and color edges- thus still sing the original automata pattern!!!!
 
-
-
+It could be that the prims generates simaltaneously from multiople seeds where a move must be valid for each seeds otherwise it isn't made 
