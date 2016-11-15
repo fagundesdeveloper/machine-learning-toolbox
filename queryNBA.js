@@ -3,7 +3,9 @@ const fs = require('fs')
 
 // returns json
 nba.stats.allPlayers().then(res => {
-  fs.writeFile('data.txt', res, (err) => {
+  var data = JSON.stringify(res, null, '\t')
+
+  fs.writeFile('data.json', data, (err) => {
     if (err) throw err
     console.log('Save File')
   })
