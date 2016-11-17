@@ -1,37 +1,24 @@
-const nba = require('nba.js').default
+const nba = require('nba.js').default // could be .stats
 const fs = require('fs')
+const names = require('./playerNames.json')
 
-nba.stats.playerCareerStats({ LeagueID: '00', PerMode: 'PerGame', PlayerID: '203954' })
-  .then(res => {
-    var data = JSON.stringify(res, null, '\t')
+var data = {}
 
-    fs.writeFile('data.json', data, (err) => {
+for (var key in names) {
+  dataGet(key, nba.stats.playerCareerStats({ LeagueID: '00', PerMode: 'PerGame', PlayerID: names[key]}))
+}
+
+function dataGet (key, callback) {
+  callback.then(res => {
+    var contents = res['SeasonTotalsRegularSeason']
+    data[key] = contents
+    fs.writeFile('data.json', JSON.stringify(data, null, '\t'), (err) => {
       if (err) throw err
-      console.log('Save File')
     })
   })
+    .catch(err => console.error(err))
+}
 
-  /*
-    MeasureType: 'Scoring', // several other options 
-    PerMode: 'PerGame',
-    PlusMinus: '2544',
-    PaceAdjust: null, //
-    Rank: null, //
-    Season: '2015-2016', // 2016-2017
-    SeasonType: 'Regular Season',
-    Outcome: null,
-    Location: null,
-    Month: null,
-    SeasonSegment: null,
-    DateFrom: '10/4/2016', // MM/DD/YYYY
-    DateTo: '11/15/2016', //
-    OpponentTeamID: null, //
-    VsConference: null, //
-    VsDivsion: null, //
-    GameSegment: null,
-    Period: '0', // '-13'
-    LastNGames: '2', // 'n'
-    TeamId: '1610612755'
-
-  })
-  */
+// ONE: Make it overwrite the data file
+// TWO: Make it a flat map
+// TREE: Trim data to only the necessities so that the d group does less work in D3
