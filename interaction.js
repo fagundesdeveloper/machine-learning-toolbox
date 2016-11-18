@@ -16,6 +16,16 @@ window.onload = function () {
     //   .await(ready)
 
   d3.json('data.json', function (err, data) {
+    if(err){
+      console.log(err)
+    }
+
+    console.log(data)
+
+
+
+
+
     svg.selectAll('.player')
       .data(data)
       .enter().append('circle')
@@ -26,13 +36,17 @@ window.onload = function () {
         console.log(d)
       })
       .attr('cx', function (d) {
-        return (d.min * 10)
+        var namer = Object.keys(d)[0]
+        console.log(Object.keys(d)[0])
+        return (d[namer][0].fga * 100)
       })
       .attr('cy', 100)
   })
 
-// var simualation = d3.forceSimulation()
+
 }
+// var simualation = d3.forceSimulation()
+
 // .force('x', d3.forceX) // d3.forceX(width / 2).strength(.05))
 // .force('y', d3.forceY(height / 2).strength(.05))
 // .force('collide'.d3.forceCollide(function (d) {
@@ -141,18 +155,18 @@ function ready (err, datapoints) {
   .attr('fill', function (d) {
     return 'url(' + d.name.toLowerCase().replace('/ /g', '-') + ')' // here we have a regular expression that meand space and global
   })
-  // grab chart div, give it a height and width 
+  // grab chart div, give it a height and width
   // the put a g inside, transofrm it to got to a location
   // this time it will stay exactly where it is
 
-// normally we'lll have a lot of math to add margins 
+// normally we'lll have a lot of math to add margins
   // but force diagrams don't care about margins
 
 defs.selectAll('.artist-pattern')
   .data(datapoints)
   .enter().append('pattern')
   .attr('class', 'artist-pattern')
-  // copy paste everything that the pattern needs to be defined but use the d to give 
+  // copy paste everything that the pattern needs to be defined but use the d to give
   // a custom id and image path
 
 */
