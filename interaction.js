@@ -15,7 +15,7 @@ window.onload = function () {
     //   .defer(d3.json, 'playerNames.json')
     //   .await(ready)
 
-  d3.json('playerNames.json', function (err, data) {
+  d3.json('data.json', function (err, data) {
     svg.selectAll('.player')
       .data(data)
       .enter().append('circle')
@@ -25,11 +25,13 @@ window.onload = function () {
       .on('click', function (d) {
         console.log(d)
       })
-      .attr('cx', 100)
+      .attr('cx', function (d) {
+        return (d.min * 10)
+      })
       .attr('cy', 100)
   })
 
-  var simualation = d3.forceSimulation()
+// var simualation = d3.forceSimulation()
 }
 // .force('x', d3.forceX) // d3.forceX(width / 2).strength(.05))
 // .force('y', d3.forceY(height / 2).strength(.05))
@@ -37,9 +39,9 @@ window.onload = function () {
 //   return radiusScale(d.pts)
 // }))
 
-// function ready (err, datapoints) {
+// function ready (err, datap) {
 //   var circle = svg.selectAll('.player')
-//     .data(datapoints)
+//     .data(data)
 //     .enter().append('circle')
 //     .attr('class', 'player')
 //     .attr('r', 10)
