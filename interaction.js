@@ -1,11 +1,9 @@
 window.onload = function () {
-  const height = 600
-  const width = 600
+  const height = screen.height
+  const width = screen.width
 
   var radiusScale = d3.scaleSqrt().domain([1, 300]).range([10, 80])
 
-  var xCors = []
-  var yCors = []
   var svg = d3.select('#court')
     .append('svg')
     .attr('height', height)
@@ -28,20 +26,16 @@ window.onload = function () {
       .attr('stroke', 'black')
       .attr('fill', 'white')
       .on('click', function (d) {
-        console.log(d)
+        console.log(coordinateArray('pts'))
       })
       .attr('cx', function (d) {
-        var xCor = d[Object.keys(d)[0]][0].gs
-        xCors.push(xCor)
-        return xCor * 10
+        return (d[Object.keys(d)[0]][0].gs * 10)
       })
       .attr('cy', function (d) {
-        var yCor = d[Object.keys(d)[0]][0].pts
-        yCors.push(yCors)
-        return yCor * 10
+        return (d[Object.keys(d)[0]][0].pts * 10)
       })
 
-    elemEnter.append('text')
+    var label = elemEnter.append('text')
       .text(function (d) {
         return (d[Object.keys(d)[0]][0].name)
       })
@@ -55,61 +49,89 @@ window.onload = function () {
         return (d[Object.keys(d)[0]][0].pts * 10)
       })
 
+  
     var xScale = d3.scaleLinear()
-      .range([0, xCors.max])
+    .range([0, 1000])
 
-    var xAxis = elem
-      .d3.axisBottom(xScale)
-      // ticks
 
-    // var nodes = svg.selectAll('.player')
-      //   .data(data)
-      //   .enter().append('circle')
-      //   .attr('class', 'player')
-      //   .attr('r', function (d) {
-      //     return (d[Object.keys(d)[0]][0].player_age)
-      //   })
-      //   .attr('fill', 'lightblue')
+    var axisX = svg.append("g")
+      .attr("class", "axis")
+      .attr('transform', 'translate(0,0)')
+      .call(d3.axisBottom(xScale))
 
-    //   .on('click', function (d) {
-      //     console.log(d)
-      //   })
-      //   .attr('cx', function (d) {
-      //     return (d[Object.keys(d)[0]][0].gs * 10)
-      //   })
-      //   .attr('cy', function (d) {
-      //     return (d[Object.keys(d)[0]][0].pts * 10)
-      //   })
+    var axisY = svg.append("g")
+      .attr("class", "axis")
+      .attr('transform', 'translate( ' + 10 + ',' + 10 + ')')
+      .call(d3.axisLeft(xScale))
 
-    // var text = svg.selectAll(nodes)
-      //   .append('text')
-      //   .text('hello')
-      // .attr('x', 0)
-      // .attr('y', 0)
-      // .attr('font-family', 'sans-serif')
-      // .attr('font-size', '10px')
-      // .attr('text-anchor', 'middle')
+    function coordinateArray(key){
+      var arr  = []
+      data.forEach(player => {
+        for(season in player){
+          arr.push(player[season][0][key])
+          }
+      })
+      return arr
+      }
 
-    // var simulation = d3.forceSimulation(nodes)
-      //   .force('x', d3.forceX(width / 2).strength(0.05))
-      //   .force('y', d3.forceY(height / 2).strength(0.05))
-      //   .force('collide', d3.forceCollide(10).strength(0.05)) 
 
-    var simulation = d3.forceSimulation(data)
-      .force('x', d3.forceX(function (d) { return (d[Object.keys(d)[0]][0].min * 10)}).strength(1))
-      .force('y', d3.forceY(height / 2))
-      .force('collide', d3.forceCollide(4))
 
-      // .stop()
 
-      // simulation
-      //   .on('tick', tick)
 
-      // function tick () {
-      //   nodes
-      // // .attr('cx', 10)
-      // // .attr('cy', 20)
-      // }
+    } //end of ready 
+
+
+
+  // ticks
+
+  // var nodes = svg.selectAll('.player')
+  //   .data(data)
+  //   .enter().append('circle')
+  //   .attr('class', 'player')
+  //   .attr('r', function (d) {
+  //     return (d[Object.keys(d)[0]][0].player_age)
+  //   })
+  //   .attr('fill', 'lightblue')
+
+  //   .on('click', function (d) {
+  //     console.log(d)
+  //   })
+  //   .attr('cx', function (d) {
+  //     return (d[Object.keys(d)[0]][0].gs * 10)
+  //   })
+  //   .attr('cy', function (d) {
+  //     return (d[Object.keys(d)[0]][0].pts * 10)
+  //   })
+
+  // var text = svg.selectAll(nodes)
+  //   .append('text')
+  //   .text('hello')
+  // .attr('x', 0)
+  // .attr('y', 0)
+  // .attr('font-family', 'sans-serif')
+  // .attr('font-size', '10px')
+  // .attr('text-anchor', 'middle')
+
+  // var simulation = d3.forceSimulation(nodes)
+  //   .force('x', d3.forceX(width / 2).strength(0.05))
+  //   .force('y', d3.forceY(height / 2).strength(0.05))
+  //   .force('collide', d3.forceCollide(10).strength(0.05)) 
+
+  // var simulation = d3.forceSimulation(data)
+  //   .force('x', d3.forceX(function (d) { return (d[Object.keys(d)[0]][0].min * 10)}).strength(1))
+  //   .force('y', d3.forceY(height / 2))
+  //   .force('collide', d3.forceCollide(4))
+
+  // .stop()
+
+  // simulation
+  //   .on('tick', tick)
+
+  // function tick () {
+  //   nodes
+  // // .attr('cx', 10)
+  // // .attr('cy', 20)
+  // }
 
   // d3.select('#seperate').on('click', function () {
   //   // simulation
@@ -120,7 +142,7 @@ window.onload = function () {
   //   circles
   //     .attr('cy', 200)
   // })
-  }
+
 }
 
 /*
@@ -187,5 +209,14 @@ defs.selectAll('.artist-pattern')
   .attr('class', 'artist-pattern')
   // copy paste everything that the pattern needs to be defined but use the d to give
   // a custom id and image path
+
+I then slowly ramp up collision strength over the length of the transition, with a d3.timer:
+let strength = simulation.force('collide').strength(),
+  endTime = 3000;
+let transitionTimer = d3.timer(elapsed => {
+  let dt = elapsed / endTime;
+  simulation.force('collide').strength(Math.pow(dt, 3) * strength);
+  if (dt >= 1.0) transitionTimer.stop();
+});
 
 */

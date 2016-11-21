@@ -56,6 +56,3 @@ function dataGet (key, callback) {
   }).catch(err => console.error(err))
 }
 
-// TWO: Make it a flat map
-// TREE: Trim data to only the necessities so that the d group does less work in D3
-// Four: make sure that the json file is proper format

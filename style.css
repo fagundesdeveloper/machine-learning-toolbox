@@ -1,7 +1,11 @@
-canvas{
-	background-color: grey;
-}
-
 .player :hover{
 	outline-color: red;
+}
+
+.player {
+	outline: ;
+}
+
+.court{
+	background-color: #f4e581;
 }
