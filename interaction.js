@@ -4,14 +4,12 @@ window.onload = function () {
 
   var radiusScale = d3.scaleSqrt().domain([1, 300]).range([10, 80])
 
+  var xCors = []
+  var yCors = []
   var svg = d3.select('#court')
     .append('svg')
     .attr('height', height)
     .attr('width', width)
-
-  // .attr('transform', 'translate(0,0)')
-
-  // .call(d3.axisBottom(5).ticks(20, '.0s'))
 
   d3.queue()
     .defer(d3.json, 'data.json')
@@ -21,13 +19,11 @@ window.onload = function () {
     var elem = svg.selectAll('g')
       .data(data)
 
-    /*Create and place the "blocks" containing the circle and the text */
     var elemEnter = elem.enter()
       .append('g')
       .attr('transform', 'translate(0,0)')
 
-    /*Create the circle for each block */
-    var circle = elemEnter.append('circle')
+    var nodes = elemEnter.append('circle')
       .attr('r', 20)
       .attr('stroke', 'black')
       .attr('fill', 'white')
@@ -35,17 +31,17 @@ window.onload = function () {
         console.log(d)
       })
       .attr('cx', function (d) {
-        return (d[Object.keys(d)[0]][0].gs * 10)
+        var xCor = d[Object.keys(d)[0]][0].gs
+        xCors.push(xCor)
+        return xCor * 10
       })
       .attr('cy', function (d) {
-        return (d[Object.keys(d)[0]][0].pts * 10)
+        var yCor = d[Object.keys(d)[0]][0].pts
+        yCors.push(yCors)
+        return yCor * 10
       })
 
-    /* Create the text for each block */
     elemEnter.append('text')
-      .on('click', function (d) {
-        console.log(d)
-      })
       .text(function (d) {
         return (d[Object.keys(d)[0]][0].name)
       })
@@ -58,6 +54,13 @@ window.onload = function () {
       .attr('dy', function (d) {
         return (d[Object.keys(d)[0]][0].pts * 10)
       })
+
+    var xScale = d3.scaleLinear()
+      .range([0, xCors.max])
+
+    var xAxis = elem
+      .d3.axisBottom(xScale)
+      // ticks
 
     // var nodes = svg.selectAll('.player')
       //   .data(data)

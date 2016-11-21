@@ -3,5 +3,5 @@ canvas{
 }
 
 .player :hover{
-	fill: red;
+	outline-color: red;
 }
