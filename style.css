@@ -1,3 +1,7 @@
 canvas{
 	background-color: grey;
 }
+
+.player :hover{
+	fill: red;
+}

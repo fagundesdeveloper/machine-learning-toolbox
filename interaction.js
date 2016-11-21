@@ -2,82 +2,123 @@ window.onload = function () {
   const height = 600
   const width = 600
 
-  // var radiusScale = d3.scaleSqrt().domain([1, 300]).range([10, 80])
+  var radiusScale = d3.scaleSqrt().domain([1, 300]).range([10, 80])
 
-  const svg = d3.select('#court')
+  var svg = d3.select('#court')
     .append('svg')
     .attr('height', height)
     .attr('width', width)
-    .append('g')
-    .attr('transform', 'translate(0,0)') // 'translate( ' + width / 2 + ',' + height / 2 + ')')
 
-  // d3.queue()
-    //   .defer(d3.json, 'playerNames.json')
-    //   .await(ready)
+  // .attr('transform', 'translate(0,0)')
 
-  d3.json('data.json', function (err, data) {
-    if(err){
-      console.log(err)
-    }
+  // .call(d3.axisBottom(5).ticks(20, '.0s'))
 
-    console.log(data)
+  d3.queue()
+    .defer(d3.json, 'data.json')
+    .await(ready)
 
-
-
-
-
-    svg.selectAll('.player')
+  function ready (err, data) {
+    var elem = svg.selectAll('g')
       .data(data)
-      .enter().append('circle')
-      .attr('class', 'player')
-      .attr('r', 10)
-      .attr('fill', 'lightblue')
+
+    /*Create and place the "blocks" containing the circle and the text */
+    var elemEnter = elem.enter()
+      .append('g')
+      .attr('transform', 'translate(0,0)')
+
+    /*Create the circle for each block */
+    var circle = elemEnter.append('circle')
+      .attr('r', 20)
+      .attr('stroke', 'black')
+      .attr('fill', 'white')
       .on('click', function (d) {
         console.log(d)
       })
       .attr('cx', function (d) {
-        var namer = Object.keys(d)[0]
-        console.log(Object.keys(d)[0])
-        return (d[namer][0].fga * 100)
+        return (d[Object.keys(d)[0]][0].gs * 10)
       })
-      .attr('cy', 100)
-  })
+      .attr('cy', function (d) {
+        return (d[Object.keys(d)[0]][0].pts * 10)
+      })
 
+    /* Create the text for each block */
+    elemEnter.append('text')
+      .on('click', function (d) {
+        console.log(d)
+      })
+      .text(function (d) {
+        return (d[Object.keys(d)[0]][0].name)
+      })
+      .attr('font-family', 'sans-serif')
+      .attr('font-size', '10px')
+      .attr('font-color', 'black')
+      .attr('dx', function (d) {
+        return (d[Object.keys(d)[0]][0].gs * 10) // -radius + 1
+      })
+      .attr('dy', function (d) {
+        return (d[Object.keys(d)[0]][0].pts * 10)
+      })
 
+    // var nodes = svg.selectAll('.player')
+      //   .data(data)
+      //   .enter().append('circle')
+      //   .attr('class', 'player')
+      //   .attr('r', function (d) {
+      //     return (d[Object.keys(d)[0]][0].player_age)
+      //   })
+      //   .attr('fill', 'lightblue')
+
+    //   .on('click', function (d) {
+      //     console.log(d)
+      //   })
+      //   .attr('cx', function (d) {
+      //     return (d[Object.keys(d)[0]][0].gs * 10)
+      //   })
+      //   .attr('cy', function (d) {
+      //     return (d[Object.keys(d)[0]][0].pts * 10)
+      //   })
+
+    // var text = svg.selectAll(nodes)
+      //   .append('text')
+      //   .text('hello')
+      // .attr('x', 0)
+      // .attr('y', 0)
+      // .attr('font-family', 'sans-serif')
+      // .attr('font-size', '10px')
+      // .attr('text-anchor', 'middle')
+
+    // var simulation = d3.forceSimulation(nodes)
+      //   .force('x', d3.forceX(width / 2).strength(0.05))
+      //   .force('y', d3.forceY(height / 2).strength(0.05))
+      //   .force('collide', d3.forceCollide(10).strength(0.05)) 
+
+    var simulation = d3.forceSimulation(data)
+      .force('x', d3.forceX(function (d) { return (d[Object.keys(d)[0]][0].min * 10)}).strength(1))
+      .force('y', d3.forceY(height / 2))
+      .force('collide', d3.forceCollide(4))
+
+      // .stop()
+
+      // simulation
+      //   .on('tick', tick)
+
+      // function tick () {
+      //   nodes
+      // // .attr('cx', 10)
+      // // .attr('cy', 20)
+      // }
+
+  // d3.select('#seperate').on('click', function () {
+  //   // simulation
+  //   //   .force('x', d3.forceX(250)) // .strength(.05) // strength is optional
+  //   //   .force('y', d3.forceY(250))
+  //   //   .alphaTarget(0.5)
+  //   //   .restart()
+  //   circles
+  //     .attr('cy', 200)
+  // })
+  }
 }
-// var simualation = d3.forceSimulation()
-
-// .force('x', d3.forceX) // d3.forceX(width / 2).strength(.05))
-// .force('y', d3.forceY(height / 2).strength(.05))
-// .force('collide'.d3.forceCollide(function (d) {
-//   return radiusScale(d.pts)
-// }))
-
-// function ready (err, datap) {
-//   var circle = svg.selectAll('.player')
-//     .data(data)
-//     .enter().append('circle')
-//     .attr('class', 'player')
-//     .attr('r', 10)
-//     .attr('fill', 'lightblue')
-//     .on('click', function (d) {
-//       console.log(d)
-//     })
-//     .attr('cx', 50)
-//     .attr('cy', 50)
-
-// simulation.nodes(datapoints)
-//   .on('tick', ticked)
-
-// function ticked () {
-//   circles
-//     .attr('cx', function (d) {
-//       return d.x
-//     })
-//     .attr('cy', function (d) {
-//       return d.y
-//     })
-// }
 
 /*
 // step one: get them to the middle
@@ -114,35 +155,10 @@ c
   // a lot of using force diagrams is playing around with
   // the strength variable
 
-function ready (err, datapoints) {
-  var circle = svg.selectAll('.player')
-    .data(datapoints)
-    .enter().append('circle')
-    .attr('class', 'player')
-    .attr('r', function (d) {
-      return radiusScale(d.pts) // the d for data and the name of the data you want to use to calibrate radius
-    })
-    .attr('fill', 'lightblue')
-    .on('click', function (d) {
-      console.log(d)
-    })
-    .attr('cx', 50)
-
   // nodes is a phrase used often in d3
   // and it refers to the circles or things grouped in 'g'
   simulation.nodes(datapoints)
     .on('tick', ticked)
-
-  function ticked () {
-    circles
-      .attr('cx', function (d) {
-        return d.x
-      })
-      .attr('cy', function (d) {
-        return d.y
-      })
-  }
-}
 }
 
  defs.append('pattern')
