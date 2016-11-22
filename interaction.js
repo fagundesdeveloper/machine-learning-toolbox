@@ -14,26 +14,59 @@ window.onload = function () {
     .await(ready)
 
   function ready (err, data) {
+
+
     var elem = svg.selectAll('g')
       .data(data)
+
 
     var elemEnter = elem.enter()
       .append('g')
       .attr('transform', 'translate(0,0)')
 
+    
+
     var nodes = elemEnter.append('circle')
       .attr('r', 20)
       .attr('stroke', 'black')
       .attr('fill', 'white')
+      .data(function (d){
+        return {
+        radius: 25,
+        centerX: 30,
+        centerY: 50 
+        }
+      })
       .on('click', function (d) {
-        console.log(coordinateArray('pts'))
+        console.log(d)
       })
       .attr('cx', function (d) {
-        return (d[Object.keys(d)[0]][0].gs * 10)
+        console.log(d)
+        return (d.centerY * 10)
       })
-      .attr('cy', function (d) {
-        return (d[Object.keys(d)[0]][0].pts * 10)
+      .attr('cy', function(d){
+        return (d.centerX * 10)
       })
+
+
+
+
+    // var myNodes = rawData.map(function (d) {
+    //   return {
+    //     id: d.id,
+    //     radius: radiusScale(+d.total_amount),
+    //     value: +d.total_amount,
+    //     name: d.grant_title,
+    //     org: d.organization,
+    //     group: d.group,
+    //     year: d.start_year,
+    //     x: Math.random() * 900,
+    //     y: Math.random() * 800
+
+
+
+
+
 
     var label = elemEnter.append('text')
       .text(function (d) {
@@ -74,53 +107,65 @@ window.onload = function () {
       return arr
       }
 
+//       ////////////////////////force simulation
+// function charge(d) {
+//   return -forceStrength * Math.pow(d.radius, 2.0);
+// }
+
+// function ticked() {
+//   elemEnter
+//     .attr('cx', function (d) { return d.x; })
+//     .attr('cy', function (d) { return d.y; });
+// }
+
+// var center = {x: width / 2, y: height / 2};
+// var forceStrength = 0.03;
+
+// //simulation.alpha(1).restart(); ///upon movement we need to reset the alpha so that the nodes have
+// //enough energy to make the movements
+
+// var simulation = d3.forceSimulation(nodes)
+//   .force("attraction", d3.forceManyBody().strength(45).distanceMin(30))
+//   .force("charge", d3.forceManyBody().strength(-45).distanceMax(30))
+//   .on("tick", ticked)
+
+// var simulation = d3.forceSimulation(nodes)
+//   .velocityDecay(0.2)
+//   .force('x', d3.forceX().strength(forceStrength).x(center.x))
+//   .force('y', d3.forceY().strength(forceStrength).y(center.y))
+//   .force('charge', d3.forceManyBody().strength(charge))
+//   .on('tick', ticked);
+
+  //   var simulation = d3.forceSimulation(nodes)
+  //     .force('x', d3.forceX(width / 2).strength(0.05))
+  //     .force('y', d3.forceY(function (d) {
+  //       return (d[Object.keys(d)[0]][0].pts * 10)
+  //     }).strength(0.05))
+  //     .force('collide', d3.forceCollide(10).strength(0.05)) 
+
+  //   simulation
+  //     .on('tick', ticked)
+
+  //   function ticked () {
+  //     nodes
+  // }
+///////////////////////////////////////////////////
+
+
+
+  } //end of ready 
+}
 
 
 
 
-    } //end of ready 
 
-
-
-  // ticks
-
-  // var nodes = svg.selectAll('.player')
-  //   .data(data)
-  //   .enter().append('circle')
-  //   .attr('class', 'player')
-  //   .attr('r', function (d) {
-  //     return (d[Object.keys(d)[0]][0].player_age)
-  //   })
-  //   .attr('fill', 'lightblue')
-
-  //   .on('click', function (d) {
-  //     console.log(d)
-  //   })
-  //   .attr('cx', function (d) {
-  //     return (d[Object.keys(d)[0]][0].gs * 10)
-  //   })
-  //   .attr('cy', function (d) {
-  //     return (d[Object.keys(d)[0]][0].pts * 10)
-  //   })
-
-  // var text = svg.selectAll(nodes)
-  //   .append('text')
-  //   .text('hello')
-  // .attr('x', 0)
-  // .attr('y', 0)
-  // .attr('font-family', 'sans-serif')
-  // .attr('font-size', '10px')
-  // .attr('text-anchor', 'middle')
 
   // var simulation = d3.forceSimulation(nodes)
   //   .force('x', d3.forceX(width / 2).strength(0.05))
   //   .force('y', d3.forceY(height / 2).strength(0.05))
   //   .force('collide', d3.forceCollide(10).strength(0.05)) 
 
-  // var simulation = d3.forceSimulation(data)
-  //   .force('x', d3.forceX(function (d) { return (d[Object.keys(d)[0]][0].min * 10)}).strength(1))
-  //   .force('y', d3.forceY(height / 2))
-  //   .force('collide', d3.forceCollide(4))
 
   // .stop()
 
@@ -143,7 +188,7 @@ window.onload = function () {
   //     .attr('cy', 200)
   // })
 
-}
+
 
 /*
 // step one: get them to the middle
