@@ -20,9 +20,15 @@ window.onload = function () {
       .data(data)
 
 
+
+
     var elemEnter = elem.enter()
       .append('g')
+            .attr('other', function(d){
+        return d.y = 20
+      })
       .attr('transform', 'translate(0,0)')
+     
 
     
 
@@ -30,26 +36,28 @@ window.onload = function () {
       .attr('r', 20)
       .attr('stroke', 'black')
       .attr('fill', 'white')
-      .data(function (d){
-        return {
-        radius: 25,
-        centerX: 30,
-        centerY: 50 
-        }
-      })
+
       .on('click', function (d) {
         console.log(d)
       })
       .attr('cx', function (d) {
-        console.log(d)
-        return (d.centerY * 10)
+        return (10)
       })
+       .attr('y', function(d){
+        return d.cy = 45
+       })
       .attr('cy', function(d){
-        return (d.centerX * 10)
+        return (d.y * 10)
       })
 
 
-
+      // .data(function (d){
+      //   return {
+      //   radius: 25,
+      //   centerX: 30,
+      //   centerY: 50 
+      //   }
+      // })
 
     // var myNodes = rawData.map(function (d) {
     //   return {
@@ -79,7 +87,7 @@ window.onload = function () {
         return (d[Object.keys(d)[0]][0].gs * 10) // -radius + 1
       })
       .attr('dy', function (d) {
-        return (d[Object.keys(d)[0]][0].pts * 10)
+        return (d.y * 10)
       })
 
   
