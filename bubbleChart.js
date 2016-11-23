@@ -1,8 +1,10 @@
-
-
 function bubbleChart(){
   const height = screen.height
   const width = screen.width
+
+  var nodes = []
+  var svg = null
+  var players = null
 
 
   const forceStrength = 0.03;
@@ -10,39 +12,68 @@ function bubbleChart(){
   var simulation = d3.forceSimulation()
     .velocityDecay(0.2)
     .force('x', d3.forceX().strength(forceStrength))
-    .force('y', d3.forceY().strngth(forceStrength))
+    .force('y', d3.forceY().strength(forceStrength))
     .on('tick', ticked)
 
   simulation.stop()
-
-  var svg = d3.select('#court')
-    .append('svg')
-    .attr('height', height)
-    .attr('width', width)
 
   //var radiusScale = d3.scaleSqrt().domain([1, 300]).range([10, 80])
   function  createNodes(rawData) {
     var myNodes = rawData.map(function(d){
         return {
         x: Math.random() * width,
-        y: Math.random() * height
+        y: Math.random() * height,
+        radius: Math.random() * 30
       }
       })
     return myNodes
+  }
+}
+
+var chart = function chart(selector, rawData){
+  nodes = createNodes(rawData)
+
+  svg = d3.select('#court')
+    .append('svg')
+    .attr('height', height)
+    .attr('width', width)
+
+  players = svg.selectAll('.players')
+    .data(nodes) //can also try adding datapoints here
+
+  var playersE = players.enter()
+    .append('circle')
+    .classed('player', true)
+    .attr('stroke', 'black')
+    .attr('stroke-width', 2)
+    .attr('fill', 'white')
+
+    players.transition()
+      .duration(2000)
+      .attr('r', function (d){ return d.radius})
+
+    simulation.nodes(nodes)
+
+    groupBubbles();
+  }
+
+  function ticked(){
+      players
+        .attr('cx', function (d) { return d.x; })
+        .attr('cy', function (d) { return d.y; });
+  }
+
+  function groupBubbles(){
+    simulation.force('x', d3.forceX().strength(forceStrength).x(center.x));
+    simulation.alpha(1).restart();
   }
 
 
 
 
-
-
-
-
-var myBubbleChart = bubbleChart()
-
 function display(error, data){
   if (error) console.log(error)
-  myBubbleChart('#court', data)
+  bubbleChart('#court', data)
 }
 
 d3.json('data.json', display)
