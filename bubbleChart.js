@@ -1,4 +1,5 @@
 function bubbleChart(){
+  console.log('oh it you')
   const height = screen.height
   const width = screen.width
 
@@ -28,9 +29,10 @@ function bubbleChart(){
       })
     return myNodes
   }
-}
+
 
 var chart = function chart(selector, rawData){
+  console.log('hello')
   nodes = createNodes(rawData)
 
   svg = d3.select('#court')
@@ -67,9 +69,10 @@ var chart = function chart(selector, rawData){
     simulation.force('x', d3.forceX().strength(forceStrength).x(center.x));
     simulation.alpha(1).restart();
   }
+  return chart
+}
 
-
-
+var myBubbleChart = bubbleChart();
 
 function display(error, data){
   if (error) console.log(error)
