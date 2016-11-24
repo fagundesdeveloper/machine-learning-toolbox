@@ -1,72 +1,127 @@
-window.onload = function () {
+function bubbleChart(){
+  console.log('oh it you')
   const height = screen.height
   const width = screen.width
 
-  var radiusScale = d3.scaleSqrt().domain([1, 300]).range([10, 80])
+  var nodes = []
+  var svg = null
+  var players = null
 
-  var svg = d3.select('#court')
+
+  const forceStrength = 0.03;
+
+  var simulation = d3.forceSimulation()
+    .velocityDecay(0.2)
+    .force('x', d3.forceX().strength(forceStrength))
+    .force('y', d3.forceY().strength(forceStrength))
+    .on('tick', ticked)
+
+  simulation.stop()
+
+  //var radiusScale = d3.scaleSqrt().domain([1, 300]).range([10, 80])
+  function  createNodes(rawData) {
+    var myNodes = rawData.map(function(d){
+        return {
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 30
+      }
+      })
+    return myNodes
+  }
+
+
+var chart = function chart(selector, rawData){
+  console.log('hello')
+  nodes = createNodes(rawData)
+
+  svg = d3.select('#court')
     .append('svg')
     .attr('height', height)
     .attr('width', width)
 
-  d3.queue()
-    .defer(d3.json, 'data.json')
-    .await(ready)
+  players = svg.selectAll('.players')
+    .data(nodes) //can also try adding datapoints here
 
-  function ready (err, data) {
+  var playersE = players.enter()
+    .append('circle')
+    .classed('player', true)
+    .attr('stroke', 'black')
+    .attr('stroke-width', 2)
+    .attr('fill', 'white')
 
+    players.transition()
+      .duration(2000)
+      .attr('r', function (d){ return d.radius})
+
+    simulation.nodes(nodes)
+
+    groupBubbles();
+  }
+
+  function ticked(){
+      players
+        .attr('cx', function (d) { return d.x; })
+        .attr('cy', function (d) { return d.y; });
+  }
+
+  function groupBubbles(){
+    simulation.force('x', d3.forceX().strength(forceStrength).x(center.x));
+    simulation.alpha(1).restart();
+  }
+  return chart
+}
+
+var myBubbleChart = bubbleChart();
+
+function display(error, data){
+  if (error) console.log(error)
+  bubbleChart('#court', data)
+}
+
+d3.json('data.json', display)
+
+/*
+var simulation = d3.forceSimulation()
+    .velocityDecay(0.2)
+    .force("x", d3.forceX().strength(0.002))
+    .force("y", d3.forceY().strength(0.002))
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    .on('tick', ticked)
+  
+  simulation.stop();
 
     var elem = svg.selectAll('g')
       .data(data)
 
-
     var elemEnter = elem.enter()
       .append('g')
-      .attr('transform', 'translate(0,0)')
-
-    
-
-    var nodes = elemEnter.append('circle')
-      .attr('r', 20)
+      .attr('other', function(d){
+        {d.y =  20,
+        d.x = 20,
+        d.radius = 100}
+      })
+      .attr('transform', 'translate(0,0)') 
+     
+    var nodes = elemEnter
+      .append('g')
+      .append('circle')
+      .attr('r', function(d){
+        return d.radius
+      })
+      .attr('class', 'circles')
       .attr('stroke', 'black')
       .attr('fill', 'white')
-      .data(function (d){
-        return {
-        radius: 25,
-        centerX: 30,
-        centerY: 50 
-        }
-      })
+
       .on('click', function (d) {
         console.log(d)
       })
       .attr('cx', function (d) {
-        console.log(d)
-        return (d.centerY * 10)
-      })
+        return (10)
+     })
       .attr('cy', function(d){
-        return (d.centerX * 10)
+        return (d.y * 10)
       })
-
-
-
-
-    // var myNodes = rawData.map(function (d) {
-    //   return {
-    //     id: d.id,
-    //     radius: radiusScale(+d.total_amount),
-    //     value: +d.total_amount,
-    //     name: d.grant_title,
-    //     org: d.organization,
-    //     group: d.group,
-    //     year: d.start_year,
-    //     x: Math.random() * 900,
-    //     y: Math.random() * 800
-
-
-
-
-
 
     var label = elemEnter.append('text')
       .text(function (d) {
@@ -76,10 +131,10 @@ window.onload = function () {
       .attr('font-size', '10px')
       .attr('font-color', 'black')
       .attr('dx', function (d) {
-        return (d[Object.keys(d)[0]][0].gs * 10) // -radius + 1
+        return (d.x * 10) // -radius + 1
       })
       .attr('dy', function (d) {
-        return (d[Object.keys(d)[0]][0].pts * 10)
+        return (d.y * 10)
       })
 
   
@@ -107,27 +162,32 @@ window.onload = function () {
       return arr
       }
 
+      simulation.nodes(nodes)
+
 //       ////////////////////////force simulation
 // function charge(d) {
 //   return -forceStrength * Math.pow(d.radius, 2.0);
 // }
 
-// function ticked() {
-//   elemEnter
-//     .attr('cx', function (d) { return d.x; })
-//     .attr('cy', function (d) { return d.y; });
-// }
 
+function ticked() {
+  //console.log(nodes)
+  nodes
+    .attr('cx', function (d) { return d.x + 30})
+    .attr('cy', function (d) { return d.y + 30})
+}
+
+simulation.nodes(nodes)
+
+
+simulation.alpha(1).restart();
 // var center = {x: width / 2, y: height / 2};
 // var forceStrength = 0.03;
 
 // //simulation.alpha(1).restart(); ///upon movement we need to reset the alpha so that the nodes have
 // //enough energy to make the movements
 
-// var simulation = d3.forceSimulation(nodes)
-//   .force("attraction", d3.forceManyBody().strength(45).distanceMin(30))
-//   .force("charge", d3.forceManyBody().strength(-45).distanceMax(30))
-//   .on("tick", ticked)
+}
 
 // var simulation = d3.forceSimulation(nodes)
 //   .velocityDecay(0.2)
@@ -153,30 +213,10 @@ window.onload = function () {
 
 
 
-  } //end of ready 
+   //end of ready 
 }
 
 
-
-
-
-
-  // var simulation = d3.forceSimulation(nodes)
-  //   .force('x', d3.forceX(width / 2).strength(0.05))
-  //   .force('y', d3.forceY(height / 2).strength(0.05))
-  //   .force('collide', d3.forceCollide(10).strength(0.05)) 
-
-
-  // .stop()
-
-  // simulation
-  //   .on('tick', tick)
-
-  // function tick () {
-  //   nodes
-  // // .attr('cx', 10)
-  // // .attr('cy', 20)
-  // }
 
   // d3.select('#seperate').on('click', function () {
   //   // simulation
