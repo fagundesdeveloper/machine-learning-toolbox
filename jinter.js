@@ -1,6 +1,6 @@
 window.onload = function () {
   const height = 600
-  const width = 600
+  const width = 1600
 
   // var radiusScale = d3.scaleSqrt().domain([1, 300]).range([10, 80])
 
@@ -11,6 +11,9 @@ window.onload = function () {
     .append('g')
     .attr('transform', 'translate(0,0)') // 'translate( ' + width / 2 + ',' + height / 2 + ')')
 
+
+    var y = d3.scaleLinear().range([height, 0]);
+
   // d3.queue()
     //   .defer(d3.json, 'playerNames.json')
     //   .await(ready)
@@ -19,27 +22,36 @@ window.onload = function () {
     if(err){
       console.log(err)
     }
-
     console.log(data)
 
 
 
+//    console.log(data)
+    var dat = Object.keys(data);
+  //  console.log(dat)
+
+  y.domain([0, d3.max(dat, function(d) {         console.log(data[d]['CareerTotalsRegularSeason'][0]['reb'])
+              return data[d]['CareerTotalsRegularSeason'][0]['reb'];
+            })]);
+
     svg.selectAll('.player')
-      .data(data)
+      .data(dat)
       .enter().append('circle')
       .attr('class', 'player')
       .attr('r', 10)
       .attr('fill', 'lightblue')
       .on('click', function (d) {
-        console.log(d)
+        console.log(d, data[d])
       })
       .attr('cx', function (d) {
-        var namer = Object.keys(d)[0]
-        console.log(Object.keys(d)[0])
-        d[name]
-        return (d[namer][0].fga * 100)
+    //    console.log(Object.keys(d)[0])
+        console.log(d, data[d]['CareerTotalsRegularSeason'][0]['fg_pct'])
+        return data[d]['CareerTotalsRegularSeason'][0]['fg_pct'] * 2000 - 500
       })
-      .attr('cy', 100)
+      .attr('cy',  function (d) {
+      //  console.log(y(data[d]['CareerTotalsRegularSeason'][0]['reb']))
+        return y( data[d]['CareerTotalsRegularSeason'][0]['reb'])
+      })
   })
 
 

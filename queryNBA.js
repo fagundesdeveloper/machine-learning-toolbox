@@ -15,9 +15,8 @@ fs.writeFileSync('data.json', '[\n');
 
 
 for (var key in names) {
-
+  console.log(key)
   dataGet(key, nba.stats.playerCareerStats({ LeagueID: '00', PerMode: 'PerGame', PlayerID: names[key].id}))
-
 }
 
 
@@ -65,9 +64,7 @@ var objstr
 
         }
 
-
     })
-
 
   }).catch(err => console.error(err))
 
