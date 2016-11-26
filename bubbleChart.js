@@ -1,5 +1,6 @@
 function bubbleChart(){
   console.log('oh it you')
+
   var width = 940;
   var height = 600;
 
@@ -13,10 +14,103 @@ function bubbleChart(){
 
   const forceStrength = 0.3;
 
+  const height = screen.height
+  const width = screen.width
+
+  var nodes = []
+  var svg = null
+  var players = null
+
+
+  const forceStrength = 0.03;
+
+  var simulation = d3.forceSimulation()
+    .velocityDecay(0.2)
+    .force('x', d3.forceX().strength(forceStrength))
+    .force('y', d3.forceY().strength(forceStrength))
+    .on('tick', ticked)
+
+  simulation.stop()
+
+  //var radiusScale = d3.scaleSqrt().domain([1, 300]).range([10, 80])
+  function  createNodes(rawData) {
+    var myNodes = rawData.map(function(d){
+        return {
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 30
+      }
+      })
+    return myNodes
+  }
+
+
+var chart = function chart(selector, rawData){
+  console.log('hello')
+  nodes = createNodes(rawData)
+
+  svg = d3.select('#court')
+    .append('svg')
+    .attr('height', height)
+    .attr('width', width)
+
+  players = svg.selectAll('.players')
+    .data(nodes) //can also try adding datapoints here
+
+  var playersE = players.enter()
+    .append('circle')
+    .classed('player', true)
+    .attr('stroke', 'black')
+    .attr('stroke-width', 2)
+    .attr('fill', 'white')
+
+    players.transition()
+      .duration(2000)
+      .attr('r', function (d){ return d.radius})
+
+    simulation.nodes(nodes)
+
+    groupBubbles();
+  }
+
+  function ticked(){
+      players
+        .attr('cx', function (d) { return d.x; })
+        .attr('cy', function (d) { return d.y; });
+  }
+
+  function groupBubbles(){
+    simulation.force('x', d3.forceX().strength(forceStrength).x(center.x));
+    simulation.alpha(1).restart();
+  }
+  return chart
+}
+
+var myBubbleChart = bubbleChart();
+
+function display(error, data){
+  if (error) console.log(error)
+  bubbleChart('#court', data)
+}
+
+d3.json('data.json', display)
+
+/*
+var simulation = d3.forceSimulation()
+    .velocityDecay(0.2)
+    .force("x", d3.forceX().strength(0.002))
+    .force("y", d3.forceY().strength(0.002))
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    .on('tick', ticked)
+  
+  simulation.stop();
+>>>>>>> 4756dc213a29a5fb10e2209da49b119eacb83505:bubbleChart.js
+
   function charge(d) {
     return -Math.pow(d.radius, 2.0) * forceStrength;
   }
 
+<<<<<<< HEAD:bubbleChart.js
   var simulation = d3.forceSimulation()
     .velocityDecay(0.2)
     .force('x', d3.forceX().strength(forceStrength).x(center.x))
@@ -158,6 +252,37 @@ var simulation = d3.forceSimulation()
         return (d.y * 10)
       })
 
+=======
+    var elemEnter = elem.enter()
+      .append('g')
+      .attr('other', function(d){
+        {d.y =  20,
+        d.x = 20,
+        d.radius = 100}
+      })
+      .attr('transform', 'translate(0,0)') 
+     
+    var nodes = elemEnter
+      .append('g')
+      .append('circle')
+      .attr('r', function(d){
+        return d.radius
+      })
+      .attr('class', 'circles')
+      .attr('stroke', 'black')
+      .attr('fill', 'white')
+
+      .on('click', function (d) {
+        console.log(d)
+      })
+      .attr('cx', function (d) {
+        return (10)
+     })
+      .attr('cy', function(d){
+        return (d.y * 10)
+      })
+
+>>>>>>> 4756dc213a29a5fb10e2209da49b119eacb83505:bubbleChart.js
     var label = elemEnter.append('text')
       .text(function (d) {
         return (d[Object.keys(d)[0]][0].name)
