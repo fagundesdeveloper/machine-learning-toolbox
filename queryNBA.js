@@ -49,10 +49,14 @@ function dataGet (key, callback) {
 
       if (err) throw err
 
-      if (appcount === names.length) {
-        fs.appendFile('data.json', ']\n')
-      }
+        if(appcount === names.length){
+
+          fs.appendFile('data.json', ']\n');
+
+        }
+
     })
+
   }).catch(err => console.error(err))
 }
 
