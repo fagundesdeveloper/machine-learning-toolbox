@@ -14,6 +14,10 @@ fs.writeFileSync('data.json', '[\n')
 // var wriStream = fs.createWriteStream('data.json')
 
 for (var key in names) {
+<<<<<<< HEAD
+=======
+  console.log(key)
+>>>>>>> 07e633a05eea26ac46fbbd6d59e67ccaadafd236
   dataGet(key, nba.stats.playerCareerStats({ LeagueID: '00', PerMode: 'PerGame', PlayerID: names[key].id}))
 }
 
@@ -49,10 +53,21 @@ function dataGet (key, callback) {
 
       if (err) throw err
 
+<<<<<<< HEAD
       if (appcount === names.length) {
         fs.appendFile('data.json', ']\n')
       }
     })
+=======
+        if(appcount === names.length){
+
+          fs.appendFile('data.json', ']\n');
+
+        }
+
+    })
+
+>>>>>>> 07e633a05eea26ac46fbbd6d59e67ccaadafd236
   }).catch(err => console.error(err))
 }
 
