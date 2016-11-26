@@ -1,8 +1,9 @@
 function bubbleChart(){
   console.log('oh it you')
+  var width = screen.width;
+  var height = screen.height;
 
-  var width = 940;
-  var height = 600;
+  //var tooltip = floatingTooltip('gates_tooltip', 240);
 
   var center = { x: width / 2, y: height / 2 };
 
@@ -14,103 +15,10 @@ function bubbleChart(){
 
   const forceStrength = 0.3;
 
-  const height = screen.height
-  const width = screen.width
-
-  var nodes = []
-  var svg = null
-  var players = null
-
-
-  const forceStrength = 0.03;
-
-  var simulation = d3.forceSimulation()
-    .velocityDecay(0.2)
-    .force('x', d3.forceX().strength(forceStrength))
-    .force('y', d3.forceY().strength(forceStrength))
-    .on('tick', ticked)
-
-  simulation.stop()
-
-  //var radiusScale = d3.scaleSqrt().domain([1, 300]).range([10, 80])
-  function  createNodes(rawData) {
-    var myNodes = rawData.map(function(d){
-        return {
-        x: Math.random() * width,
-        y: Math.random() * height,
-        radius: Math.random() * 30
-      }
-      })
-    return myNodes
-  }
-
-
-var chart = function chart(selector, rawData){
-  console.log('hello')
-  nodes = createNodes(rawData)
-
-  svg = d3.select('#court')
-    .append('svg')
-    .attr('height', height)
-    .attr('width', width)
-
-  players = svg.selectAll('.players')
-    .data(nodes) //can also try adding datapoints here
-
-  var playersE = players.enter()
-    .append('circle')
-    .classed('player', true)
-    .attr('stroke', 'black')
-    .attr('stroke-width', 2)
-    .attr('fill', 'white')
-
-    players.transition()
-      .duration(2000)
-      .attr('r', function (d){ return d.radius})
-
-    simulation.nodes(nodes)
-
-    groupBubbles();
-  }
-
-  function ticked(){
-      players
-        .attr('cx', function (d) { return d.x; })
-        .attr('cy', function (d) { return d.y; });
-  }
-
-  function groupBubbles(){
-    simulation.force('x', d3.forceX().strength(forceStrength).x(center.x));
-    simulation.alpha(1).restart();
-  }
-  return chart
-}
-
-var myBubbleChart = bubbleChart();
-
-function display(error, data){
-  if (error) console.log(error)
-  bubbleChart('#court', data)
-}
-
-d3.json('data.json', display)
-
-/*
-var simulation = d3.forceSimulation()
-    .velocityDecay(0.2)
-    .force("x", d3.forceX().strength(0.002))
-    .force("y", d3.forceY().strength(0.002))
-    .force("center", d3.forceCenter(width / 2, height / 2))
-    .on('tick', ticked)
-  
-  simulation.stop();
->>>>>>> 4756dc213a29a5fb10e2209da49b119eacb83505:bubbleChart.js
-
   function charge(d) {
     return -Math.pow(d.radius, 2.0) * forceStrength;
   }
 
-<<<<<<< HEAD:bubbleChart.js
   var simulation = d3.forceSimulation()
     .velocityDecay(0.2)
     .force('x', d3.forceX().strength(forceStrength).x(center.x))
@@ -122,19 +30,20 @@ var simulation = d3.forceSimulation()
 
   //var radiusScale = d3.scaleSqrt().domain([1, 300]).range([10, 80])
   function  createNodes(rawData) {
-
-
-    console.log(rawData)
-
+    console.log('raw' + rawData)
+    console.log('keys' + Object.keys(rawData))
     var myNodes = Object.keys(rawData).map(function(d){
         return {
           x: Math.random() * 500,
           y: Math.random() * 400,
-        radius: Math.random() * 55
+        radius: Math.random() * 55,
+        name: rawData[d],
+        stats: Object.keys(d)
       }
       })
 
       myNodes.sort(function (a, b) { return b.radius - a.radius; });
+
 
     return myNodes
   }
@@ -154,6 +63,7 @@ var simulation = d3.forceSimulation()
 
     var playersE = players.enter()
       .append('circle')
+      .on('click', function(d){console.log(d)}) ///here is the clikcing
       .attr('r', 0)
 
       .classed('players', true)
@@ -181,7 +91,6 @@ var simulation = d3.forceSimulation()
   function ticked(){
       players
         .attr('cx', function (d,i) {
-          console.log(i, d)
           return d.x; })
         .attr('cy', function (d) {
           return d.y;
@@ -194,7 +103,51 @@ var simulation = d3.forceSimulation()
     simulation.alpha(1).restart();
 
   }
+  /*
+   function showDetail(d) {
+    // change outline to indicate hover state.
+    d3.select(this).attr('stroke', 'black');
 
+    var content = '<span class="name">Title: </span><span class="value">' +
+                  d.name +
+                  '</span><br/>' +
+                  '<span class="name">Amount: </span><span class="value">$' +
+                  addCommas(d.value) +
+                  '</span><br/>' +
+                  '<span class="name">Year: </span><span class="value">' +
+                  d.year +
+                  '</span>';
+
+    tooltip.showTooltip(content, d3.event);
+  }
+
+  /*
+   * Hides tooltip
+   
+  function hideDetail(d) {
+    // reset outline
+    d3.select(this)
+      .attr('stroke', d3.rgb(fillColor(d.group)).darker());
+
+    tooltip.hideTooltip();
+  }
+
+  /*
+   * Externally accessible function (this is attached to the
+   * returned chart function). Allows the visualization to toggle
+   * between "single group" and "split by year" modes.
+   *
+   * displayName is expected to be a string and either 'year' or 'all'.
+   
+  chart.toggleDisplay = function (displayName) {
+    if (displayName === 'year') {
+      splitBubbles();
+    } else {
+      groupBubbles();
+    }
+  };
+
+*/
   return chart
 
 }
@@ -208,59 +161,9 @@ function display(error, data){
 }
 
 
-d3.json('data.json', display)
-
+d3.json('playerData.json', display)
 /*
-var simulation = d3.forceSimulation()
-    .velocityDecay(0.2)
-    .force("x", d3.forceX().strength(0.002))
-    .force("y", d3.forceY().strength(0.002))
-    .force("center", d3.forceCenter(width / 2, height / 2))
-    .on('tick', ticked)
-  
-  simulation.stop();
 
-    var elem = svg.selectAll('g')
-      .data(data)
-
-    var elemEnter = elem.enter()
-      .append('g')
-      .attr('other', function(d){
-        {d.y =  20,
-        d.x = 20,
-        d.radius = 100}
-      })
-      .attr('transform', 'translate(0,0)') 
-     
-    var nodes = elemEnter
-      .append('g')
-      .append('circle')
-      .attr('r', function(d){
-        return d.radius
-      })
-      .attr('class', 'circles')
-      .attr('stroke', 'black')
-      .attr('fill', 'white')
-
-      .on('click', function (d) {
-        console.log(d)
-      })
-      .attr('cx', function (d) {
-        return (10)
-     })
-      .attr('cy', function(d){
-        return (d.y * 10)
-      })
-
-=======
-    var elemEnter = elem.enter()
-      .append('g')
-      .attr('other', function(d){
-        {d.y =  20,
-        d.x = 20,
-        d.radius = 100}
-      })
-      .attr('transform', 'translate(0,0)') 
      
     var nodes = elemEnter
       .append('g')
@@ -324,57 +227,9 @@ var simulation = d3.forceSimulation()
 
       simulation.nodes(nodes)
 
-//       ////////////////////////force simulation
-// function charge(d) {
-//   return -forceStrength * Math.pow(d.radius, 2.0);
-// }
-
-
-function ticked() {
-  //console.log(nodes)
-  nodes
-    .attr('cx', function (d) { return d.x + 30})
-    .attr('cy', function (d) { return d.y + 30})
-}
-
-simulation.nodes(nodes)
-
-
-simulation.alpha(1).restart();
-// var center = {x: width / 2, y: height / 2};
-// var forceStrength = 0.03;
-
-// //simulation.alpha(1).restart(); ///upon movement we need to reset the alpha so that the nodes have
-// //enough energy to make the movements
 
 }
 
-// var simulation = d3.forceSimulation(nodes)
-//   .velocityDecay(0.2)
-//   .force('x', d3.forceX().strength(forceStrength).x(center.x))
-//   .force('y', d3.forceY().strength(forceStrength).y(center.y))
-//   .force('charge', d3.forceManyBody().strength(charge))
-//   .on('tick', ticked);
-
-  //   var simulation = d3.forceSimulation(nodes)
-  //     .force('x', d3.forceX(width / 2).strength(0.05))
-  //     .force('y', d3.forceY(function (d) {
-  //       return (d[Object.keys(d)[0]][0].pts * 10)
-  //     }).strength(0.05))
-  //     .force('collide', d3.forceCollide(10).strength(0.05)) 
-
-  //   simulation
-  //     .on('tick', ticked)
-
-  //   function ticked () {
-  //     nodes
-  // }
-///////////////////////////////////////////////////
-
-
-
-   //end of ready 
-}
 
 
 

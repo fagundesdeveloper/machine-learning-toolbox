@@ -6,8 +6,6 @@ var fidata = 'data.json';
 
 var endjson = {};
 
-//console.log(names)
-
 var promarr = [];
 
 function makepromCalls(key) {
@@ -35,6 +33,6 @@ Promise.all(promarr).then(function(d){
   console.log('got all', d[0][1])
 
 //  console.log(endjson)
-  fs.writeFileSync('data.json', JSON.stringify(endjson));
+  fs.writeFileSync('data.json', JSON.stringify(endjson)); //null, '\t')
 
 })
