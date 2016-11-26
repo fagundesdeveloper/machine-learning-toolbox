@@ -1,9 +1,8 @@
 function bubbleChart(){
-  console.log('oh it you')
   var width = screen.width;
   var height = screen.height;
 
-  //var tooltip = floatingTooltip('gates_tooltip', 240);
+  var tooltip = floatingTooltip('statistics_tt', 240);
 
   var center = { x: width / 2, y: height / 2 };
 
@@ -11,7 +10,6 @@ function bubbleChart(){
   var nodes = []
   var svg = null
   var players = null
-
 
   const forceStrength = 0.3;
 
@@ -29,16 +27,15 @@ function bubbleChart(){
   simulation.stop()
 
   //var radiusScale = d3.scaleSqrt().domain([1, 300]).range([10, 80])
+
   function  createNodes(rawData) {
-    console.log('raw' + rawData)
-    console.log('keys' + Object.keys(rawData))
     var myNodes = Object.keys(rawData).map(function(d){
         return {
           x: Math.random() * 500,
           y: Math.random() * 400,
         radius: Math.random() * 55,
-        name: rawData[d],
-        stats: Object.keys(d)
+        name: d,
+        statistics: rawData[d]
       }
       })
 
@@ -50,7 +47,6 @@ function bubbleChart(){
 
 
   var chart = function chart(selector, rawData){
-    console.log('hello')
     nodes = createNodes(rawData)
 
     svg = d3.select('#court')
@@ -63,7 +59,9 @@ function bubbleChart(){
 
     var playersE = players.enter()
       .append('circle')
-      .on('click', function(d){console.log(d)}) ///here is the clikcing
+      .on('mouseover', function(d){
+        showDetail(d)
+      }) 
       .attr('r', 0)
 
       .classed('players', true)
@@ -71,7 +69,7 @@ function bubbleChart(){
       //    console.log(d)
         return 'black'})
       .attr('stroke-width', 2)
-      .attr('fill', 'green')
+      .attr('fill', 'white')
 
     players = players.merge(playersE);
 
@@ -103,24 +101,25 @@ function bubbleChart(){
     simulation.alpha(1).restart();
 
   }
-  /*
+  
    function showDetail(d) {
-    // change outline to indicate hover state.
-    d3.select(this).attr('stroke', 'black');
+    console.log(d)
+    //d3.select(this).attr('stroke', 'black');
 
     var content = '<span class="name">Title: </span><span class="value">' +
                   d.name +
-                  '</span><br/>' +
-                  '<span class="name">Amount: </span><span class="value">$' +
-                  addCommas(d.value) +
-                  '</span><br/>' +
-                  '<span class="name">Year: </span><span class="value">' +
-                  d.year +
                   '</span>';
 
     tooltip.showTooltip(content, d3.event);
   }
 
+  function hideDetail(d) {
+    // reset outline
+    d3.select(this)
+      .attr('stroke', d3.rgb(fillColor('yellow')).darker());
+
+    tooltip.hideTooltip();
+  }
   /*
    * Hides tooltip
    
@@ -138,16 +137,9 @@ function bubbleChart(){
    * between "single group" and "split by year" modes.
    *
    * displayName is expected to be a string and either 'year' or 'all'.
-   
-  chart.toggleDisplay = function (displayName) {
-    if (displayName === 'year') {
-      splitBubbles();
-    } else {
-      groupBubbles();
-    }
-  };
 
-*/
+  */
+
   return chart
 
 }

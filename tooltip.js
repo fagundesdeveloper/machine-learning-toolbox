@@ -1,6 +1,6 @@
 
 function floatingTooltip(tooltipId, width) {
- 
+
   var tt = d3.select('body')
     .append('div')
     .attr('class', 'tooltip')
