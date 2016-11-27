@@ -45,6 +45,20 @@ function bubbleChart(){
     return myNodes
   }
 
+  var curriedStat = function(rawData){
+    return function(stat){
+      var arr  = []
+      rawData.forEach(player => {
+      for(season in player){
+        arr.push(player[season][0][stat])
+      }
+    })
+    return arr
+
+    }
+  }
+
+
 
   var chart = function chart(selector, rawData){
     nodes = createNodes(rawData)
@@ -72,6 +86,7 @@ function bubbleChart(){
       .attr('fill', 'white')
 
     players = players.merge(playersE);
+    axis()
 
       players.transition()
         .duration(2000)
@@ -97,18 +112,81 @@ function bubbleChart(){
 
   function groupBubbles(){
 
-    simulation.force('x', d3.forceX().strength(forceStrength).x(center.x));
-    simulation.alpha(1).restart();
+    simulation
+    .force('x', d3.forceX().strength(forceStrength).x(function(d){
+      return (d.statistics[0].pts * 10)
+    }))
+    .force('y', d3.forceY().strength(forceStrength).y(function(d){
+      return createScale('gs', d.statistics[0].gs)
+    }))
+    .alpha(1).restart();
 
   }
+
+  function createScale(key, value){
+    var keyArray = [0, 82]
+    var scale = d3.scaleLinear()
+      .domain([d3.min(keyArray), d3.max(keyArray)]) //input
+      .range([0, width]) //output
+      console.log('scaled ' + scale(value))
+      console.log('value ' + value)
+    return scale(value)
+  }
+
+  //make raw data a global that can be accessed by the scale creation function
+
+  
+
+  function changeParameter(){
+    simulation
+    .force('x', d3.forceX().strength(forceStrength).x(10))
+    .alpha(1).restart()
+
+  }
+
+  function axis(){
+    console.log('here')
+    var xScale = d3.scaleLinear()
+      .range([0, 1000])
+
+
+    var axisX = svg.append("g")
+      .attr("class", "axis")
+      .attr('transform', 'translate(0,0)')
+      .call(d3.axisBottom(xScale))
+  
+
+    var axisY = svg.append("g")
+      .attr("class", "axis")
+      .attr('transform', 'translate( ' + 10 + ',' + 10 + ')')
+      .call(d3.axisLeft(xScale))
+
+    }
+  
+
+
+
+    
   
    function showDetail(d) {
     console.log(d)
     //d3.select(this).attr('stroke', 'black');
 
-    var content = '<span class="name">Title: </span><span class="value">' +
+    var content = '<span class="name">Name: </span><span class="value">' +
                   d.name +
-                  '</span>';
+                  '</span><br/>' + 
+                  '<span class="ast">Assists: </span><span class="value">' +
+                  d.statistics[0].ast +
+                  '</span><br/>' +
+                  '<span class="blk">Blocks: </span><span class="value">' +
+                  d.statistics[0].blk +
+                  '</span><br/>' +
+                  '<span class="reb">Rebounds: </span><span class="value">' +
+                  d.statistics[0].reb +
+                  '</span><br/>' +
+                  '<span class="stl">Steals: </span><span class="value">' +
+                  d.statistics[0].stl +
+                  '</span>'
 
     tooltip.showTooltip(content, d3.event);
   }
@@ -131,18 +209,42 @@ function bubbleChart(){
     tooltip.hideTooltip();
   }
 
-  /*
-   * Externally accessible function (this is attached to the
-   * returned chart function). Allows the visualization to toggle
-   * between "single group" and "split by year" modes.
-   *
-   * displayName is expected to be a string and either 'year' or 'all'.
-
   */
+
+  //   chart.toggleDisplay = function (displayName) {
+  //   if (displayName === 'year') {
+  //     splitBubbles();
+  //   } else {
+  //     groupBubbles();
+  //   }
+  // };
 
   return chart
 
 }
+
+
+// function setupButtons() {
+//   d3.select('#toolbar') //add the classes for each of the stat categorting
+//     .selectAll('.button')
+//     .on('click', function () {
+//       // Remove active class from all buttons
+//       d3.selectAll('.button').classed('active', false);
+//       // Find the button just clicked
+//       var button = d3.select(this);
+
+//       // Set it as the active button
+//       button.classed('active', true);
+
+//       // Get the id of the button
+//       var buttonId = button.attr('id');
+
+//       // Toggle the bubble chart based on
+//       // the currently clicked button.
+//       myBubbleChart.toggleDisplay(buttonId);
+//     });
+// }
+
 
 var myBubbleChart = bubbleChart();
 
@@ -153,78 +255,13 @@ function display(error, data){
 }
 
 
+
 d3.json('playerData.json', display)
 /*
 
+
      
-    var nodes = elemEnter
-      .append('g')
-      .append('circle')
-      .attr('r', function(d){
-        return d.radius
-      })
-      .attr('class', 'circles')
-      .attr('stroke', 'black')
-      .attr('fill', 'white')
-
-      .on('click', function (d) {
-        console.log(d)
-      })
-      .attr('cx', function (d) {
-        return (10)
-     })
-      .attr('cy', function(d){
-        return (d.y * 10)
-      })
-
->>>>>>> 4756dc213a29a5fb10e2209da49b119eacb83505:bubbleChart.js
-    var label = elemEnter.append('text')
-      .text(function (d) {
-        return (d[Object.keys(d)[0]][0].name)
-      })
-      .attr('font-family', 'sans-serif')
-      .attr('font-size', '10px')
-      .attr('font-color', 'black')
-      .attr('dx', function (d) {
-        return (d.x * 10) // -radius + 1
-      })
-      .attr('dy', function (d) {
-        return (d.y * 10)
-      })
-
   
-    var xScale = d3.scaleLinear()
-    .range([0, 1000])
-
-
-    var axisX = svg.append("g")
-      .attr("class", "axis")
-      .attr('transform', 'translate(0,0)')
-      .call(d3.axisBottom(xScale))
-
-    var axisY = svg.append("g")
-      .attr("class", "axis")
-      .attr('transform', 'translate( ' + 10 + ',' + 10 + ')')
-      .call(d3.axisLeft(xScale))
-
-    function coordinateArray(key){
-      var arr  = []
-      data.forEach(player => {
-        for(season in player){
-          arr.push(player[season][0][key])
-          }
-      })
-      return arr
-      }
-
-      simulation.nodes(nodes)
-
-
-}
-
-
-
-
   // d3.select('#seperate').on('click', function () {
   //   // simulation
   //   //   .force('x', d3.forceX(250)) // .strength(.05) // strength is optional
