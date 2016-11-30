@@ -10,6 +10,7 @@ function bubbleChart(){
   var nodes = []
   var svg = null
   var players = null
+  var statScale = null
 
   const forceStrength = 0.3;
 
@@ -45,23 +46,20 @@ function bubbleChart(){
     return myNodes
   }
 
-  var curriedStat = function(rawData){
-    return function(stat){
+  var curriedStat = function(data){  
+    return function(stat, season){
       var arr  = []
-      rawData.forEach(player => {
-      for(season in player){
-        arr.push(player[season][0][stat])
-      }
-    })
+      Object.keys(data).map(player => {
+        arr.push(data[player][season][stat])
+      })
     return arr
-
     }
   }
 
 
-
   var chart = function chart(selector, rawData){
     nodes = createNodes(rawData)
+    statArray = curriedStat(rawData)
 
     svg = d3.select('#court')
       .append('svg')
@@ -123,21 +121,22 @@ function bubbleChart(){
 
   }
 
-  function createScale(key, value){
-    var keyArray = [0, 82]
-    var scale = d3.scaleLinear()
-      .domain([d3.min(keyArray), d3.max(keyArray)]) //input
-      .range([0, width]) //output
-      console.log('scaled ' + scale(value))
-      console.log('value ' + value)
-    return scale(value)
+  function generateScale(stat, season){
+    var keyArray = statArray(stat, season)
+    return function(value){
+      d3.scaleLinear(value)
+      .domain([d3.min(keyArray), d3.max(keyArray)]) 
+      .range([0, width])   //change this to axis or something- should be a variable set
+    }
   }
 
-  //make raw data a global that can be accessed by the scale creation function
+  function arrangeBubbles(){
+    var  scale = generateScale('pts', 0)
+    //call simulation method and axis method and let them shift using the new scaled array 
 
-  
-
-  function changeParameter(){
+    //this guy sets the variable for the scale 
+    //check how to have a conscise scale for ticks and position
+    //then scale change of axis, position/forces
     simulation
     .force('x', d3.forceX().strength(forceStrength).x(10))
     .alpha(1).restart()
@@ -169,9 +168,6 @@ function bubbleChart(){
     
   
    function showDetail(d) {
-    console.log(d)
-    //d3.select(this).attr('stroke', 'black');
-
     var content = '<span class="name">Name: </span><span class="value">' +
                   d.name +
                   '</span><br/>' + 
