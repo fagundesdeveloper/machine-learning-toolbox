@@ -1,16 +1,13 @@
 function bubbleChart(){
   var width = screen.width;
   var height = screen.height;
-
-  var tooltip = floatingTooltip('statistics_tt', 240);
-
-  var center = { x: width / 2, y: height / 2 };
-
-
   var nodes = []
   var svg = null
   var players = null
   var statScale = null
+
+  var tooltip = floatingTooltip('statistics_tt', 240);
+  var center = { x: width / 2, y: height / 2 };
 
   const forceStrength = 0.3;
 
@@ -27,8 +24,6 @@ function bubbleChart(){
 
   simulation.stop()
 
-  //var radiusScale = d3.scaleSqrt().domain([1, 300]).range([10, 80])
-
   function  createNodes(rawData) {
     var myNodes = Object.keys(rawData).map(function(d){
         return {
@@ -41,7 +36,6 @@ function bubbleChart(){
       })
 
       myNodes.sort(function (a, b) { return b.radius - a.radius; });
-
 
     return myNodes
   }
@@ -74,8 +68,7 @@ function bubbleChart(){
       .on('mouseover', function(d){
         showDetail(d)
       }) 
-      .attr('r', 0)
-
+      .attr('r', 0)  //var radiusScale = d3.scaleSqrt().domain([1, 300]).range([10, 80])
       .classed('players', true)
       .attr('stroke', function(d){
       //    console.log(d)
@@ -95,7 +88,7 @@ function bubbleChart(){
 
       simulation.nodes(nodes)
 
-      groupBubbles();
+      arrangeBubbles()
     }
 
 
@@ -108,39 +101,31 @@ function bubbleChart(){
         });
   }
 
-  function groupBubbles(){
-
-    simulation
-    .force('x', d3.forceX().strength(forceStrength).x(function(d){
-      return (d.statistics[0].pts * 10)
-    }))
-    .force('y', d3.forceY().strength(forceStrength).y(function(d){
-      return createScale('gs', d.statistics[0].gs)
-    }))
-    .alpha(1).restart();
-
-  }
-
   function generateScale(stat, season){
     var keyArray = statArray(stat, season)
     return function(value){
-      d3.scaleLinear(value)
+      var x = d3.scaleLinear()
       .domain([d3.min(keyArray), d3.max(keyArray)]) 
       .range([0, width])   //change this to axis or something- should be a variable set
+    
+      return x(value)
     }
   }
 
   function arrangeBubbles(){
-    var  scale = generateScale('pts', 0)
-    //call simulation method and axis method and let them shift using the new scaled array 
-
-    //this guy sets the variable for the scale 
-    //check how to have a conscise scale for ticks and position
-    //then scale change of axis, position/forces
+    var scaleY = generateScale('pts', 0)
+    var scaleX = generateScale('gs', 0)
+  
     simulation
-    .force('x', d3.forceX().strength(forceStrength).x(10))
-    .alpha(1).restart()
+      .force('x', d3.forceX().strength(forceStrength).x(function(d){
+        return (scaleX(d.statistics[0].gs))
+      }))
+      .force('y', d3.forceY().strength(forceStrength).y(function(d){
+        return (scaleY(d.statistics[0].pts))
+      }))
+      .alpha(1).restart();
 
+      //axis
   }
 
   function axis(){
@@ -148,24 +133,16 @@ function bubbleChart(){
     var xScale = d3.scaleLinear()
       .range([0, 1000])
 
-
     var axisX = svg.append("g")
       .attr("class", "axis")
       .attr('transform', 'translate(0,0)')
       .call(d3.axisBottom(xScale))
   
-
     var axisY = svg.append("g")
       .attr("class", "axis")
       .attr('transform', 'translate( ' + 10 + ',' + 10 + ')')
       .call(d3.axisLeft(xScale))
-
     }
-  
-
-
-
-    
   
    function showDetail(d) {
     var content = '<span class="name">Name: </span><span class="value">' +
@@ -194,29 +171,8 @@ function bubbleChart(){
 
     tooltip.hideTooltip();
   }
-  /*
-   * Hides tooltip
-   
-  function hideDetail(d) {
-    // reset outline
-    d3.select(this)
-      .attr('stroke', d3.rgb(fillColor(d.group)).darker());
-
-    tooltip.hideTooltip();
-  }
-
-  */
-
-  //   chart.toggleDisplay = function (displayName) {
-  //   if (displayName === 'year') {
-  //     splitBubbles();
-  //   } else {
-  //     groupBubbles();
-  //   }
-  // };
 
   return chart
-
 }
 
 
@@ -244,18 +200,18 @@ function bubbleChart(){
 
 var myBubbleChart = bubbleChart();
 
-
 function display(error, data){
   if (error) console.log(error)
   myBubbleChart('#court', data)
 }
 
-
-
 d3.json('playerData.json', display)
 /*
 
-
+{
+  put simulation and transition in this 
+  and default values
+}
      
   
   // d3.select('#seperate').on('click', function () {
