@@ -5,7 +5,8 @@ function floatingTooltip(tooltipId, width) {
     .append('div')
     .attr('class', 'tooltip')
     .attr('id', tooltipId)
-    .style('pointer-events', 'none');
+    // .style('pointer-events', 'none')
+
 
 
   if (width) {
@@ -17,9 +18,11 @@ function floatingTooltip(tooltipId, width) {
 
   function showTooltip(content, event) {
     tt.style('opacity', 1.0)
-      .html(content);
+      .html(content)
 
-    updatePosition(event);
+    updatePosition(event)
+
+
   }
 
 

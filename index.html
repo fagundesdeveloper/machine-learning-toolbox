@@ -9,16 +9,19 @@
 	<div id="toolbar">
 		<button id = "individual">Indiviual</button>
 		<button id = "scatterPlot">Scatter</button>
-		<button id= "scoringSplits">Scoring Splits</button>
-		<button id= "forward">FArrow</button>
-		<button id="backward">BArrow</button>
-		<a href ='#' id="scatterPlots" class="button">
+		<button id= "scoringSplits" class= "season">Scoring Splits</button>
+		<button id= "forward" class="season">FArrow</button>
+		<button id="backward" class="season">BArrow</button>
 	</div>
 	<div id="court"> </div>
 
 	<script src="https://d3js.org/d3.v4.min.js"></script>
 	<script src="tooltip.js"></script>
 	<script src="bubbleChart.js"></script>
-
+	<script>
+	  function arrangeBubbles(stat, season) {
+        console.log(stat + "djd" + season)
+      }
+      </script>
 </body>
 </html>

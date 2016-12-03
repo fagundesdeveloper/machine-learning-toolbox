@@ -1,10 +1,13 @@
 function bubbleChart(){
-  var width = screen.width;
-  var height = screen.height;
-  var nodes = []
-  var svg = null
-  var players = null
-  var statScale = null
+  var width = screen.width,
+  height = screen.height,
+  nodes = [],
+  statX = null, 
+  statY = null,
+  seasonZ = null,
+  svg = null,
+  players = null
+  
 
   var tooltip = floatingTooltip('statistics_tt', 240);
   var center = { x: width / 2, y: height / 2 };
@@ -77,7 +80,7 @@ function bubbleChart(){
       .attr('fill', 'white')
 
     players = players.merge(playersE);
-    axis()
+ 
 
       players.transition()
         .duration(2000)
@@ -88,7 +91,7 @@ function bubbleChart(){
 
       simulation.nodes(nodes)
 
-      arrangeBubbles()
+      arrangeBubbles('season_id', 'pts', 0)
     }
 
 
@@ -103,64 +106,69 @@ function bubbleChart(){
 
   function generateScale(stat, season){
     var keyArray = statArray(stat, season)
-    return function(value){
-      var x = d3.scaleLinear()
-      .domain([d3.min(keyArray), d3.max(keyArray)]) 
-      .range([0, width])   //change this to axis or something- should be a variable set
-    
-      return x(value)
-    }
+      return d3.scaleLinear()
+        .domain([d3.min(keyArray), d3.max(keyArray)]) 
+        .range([0, width])     
   }
 
-  function arrangeBubbles(){
-    var scaleY = generateScale('pts', 0)
-    var scaleX = generateScale('gs', 0)
+
+//y is points
+//x is age/maybe year
+//radius is stl/blk/reb/ast
+//color is percentage
+
+  function arrangeBubbles(statX, statY, season, flag = null){
+
+    var scaleY = generateScale(statY, season)
+    var scaleX = generateScale(statX, season)
+
   
+    axis(scaleX, scaleY) 
+      
     simulation
       .force('x', d3.forceX().strength(forceStrength).x(function(d){
-        return (scaleX(d.statistics[0].gs))
+        return (scaleX(d.statistics[season][statX].substring(0, 4)))
       }))
       .force('y', d3.forceY().strength(forceStrength).y(function(d){
-        return (scaleY(d.statistics[0].pts))
+        return (scaleY(d.statistics[season][statY]))
       }))
       .alpha(1).restart();
-
-      //axis
   }
 
-  function axis(){
-    console.log('here')
-    var xScale = d3.scaleLinear()
-      .range([0, 1000])
 
-    var axisX = svg.append("g")
-      .attr("class", "axis")
-      .attr('transform', 'translate(0,0)')
-      .call(d3.axisBottom(xScale))
-  
-    var axisY = svg.append("g")
-      .attr("class", "axis")
-      .attr('transform', 'translate( ' + 10 + ',' + 10 + ')')
-      .call(d3.axisLeft(xScale))
-    }
-  
+
+    var axis = function axis(scaleX, scaleY){        
+      svg.append('g')
+        .attr('transform', 'translate(0,0)')
+        .call(d3.axisBottom(scaleX))
+       
+     svg.append('g')
+        .attr('transform', 'translate( ' + 50 + ',' + 50 + ')')
+        .call(d3.axisLeft(scaleY))
+      }
+
+
    function showDetail(d) {
-    var content = '<span class="name">Name: </span><span class="value">' +
-                  d.name +
-                  '</span><br/>' + 
-                  '<span class="ast">Assists: </span><span class="value">' +
-                  d.statistics[0].ast +
-                  '</span><br/>' +
-                  '<span class="blk">Blocks: </span><span class="value">' +
-                  d.statistics[0].blk +
-                  '</span><br/>' +
-                  '<span class="reb">Rebounds: </span><span class="value">' +
-                  d.statistics[0].reb +
-                  '</span><br/>' +
-                  '<span class="stl">Steals: </span><span class="value">' +
-                  d.statistics[0].stl +
-                  '</span>'
 
+    var content = '<div id="name" class="value" onclick="arrangeBubbles(this.id, 0)"> Name:  ' +
+                  d.name +
+                  '</div><br/>' +
+                  '<div id="pts" class="value" onclick="arrangeBubbles(this.id, 0)"> Points:  ' +
+                  d.statistics[0].pts +
+                  '</div><br/>' +
+                  '<div id="ast" class="value" onclick="arrangeBubbles(this.id, 0)"> Assists:  ' +
+                  d.statistics[0].ast +
+                  '</div><br/>' +
+                  '<div id="reb" class="value" onclick="arrangeBubbles(this.id, 0)"> Rebounds:  ' +
+                  d.statistics[0].reb +
+                  '</div><br/>' +
+                  '<div id="blk" class="value" onclick="arrangeBubbles(this.id, 0)"> Blocks:  ' +
+                  d.statistics[0].blk +
+                  '</div><br/>' +
+                  '<div id="stl" class="value" onclick="arrangeBubbles(this.id, 0)"> Steals:  ' +
+                  d.statistics[0].stl +
+                  '</div>'
+  
     tooltip.showTooltip(content, d3.event);
   }
 
@@ -299,5 +307,23 @@ let transitionTimer = d3.timer(elapsed => {
   simulation.force('collide').strength(Math.pow(dt, 3) * strength);
   if (dt >= 1.0) transitionTimer.stop();
 });
+
+// function generateScale(stat, season){
+//     var keyArray = statArray(stat, season)
+//     return function(value = null){
+//       if (value === null){
+//         return d3.scaleLinear()
+//           .domain([d3.min(keyArray), d3.max(keyArray)]) 
+//           .range([0, width])    
+//         }
+//         else {
+//           var x = d3.scaleLinear()
+//           .domain([d3.min(keyArray), d3.max(keyArray)]) 
+//           .range([0, width])   //change this to axis or something- should be a variable set
+        
+//           return x(value)
+//         }
+//     }
+//   }
 
 */
