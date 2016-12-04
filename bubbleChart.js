@@ -2,9 +2,9 @@ function bubbleChart(){
   var width = screen.width,
   height = screen.height,
   nodes = [],
-  statX = null, 
-  statY = null,
-  seasonZ = null,
+  statX = "season_id", 
+  statY = "pts",
+  seasonZ = 0,
   svg = null,
   players = null
   
@@ -45,9 +45,13 @@ function bubbleChart(){
 
   var curriedStat = function(data){  
     return function(stat, season){
+      console.log(data)   //deal with player that have less than 1 season
       var arr  = []
       Object.keys(data).map(player => {
-        arr.push(data[player][season][stat])
+        if(data[player][season] == undefined){
+          return
+        }
+        else {arr.push(data[player][season][stat])}
       })
     return arr
     }
@@ -89,7 +93,7 @@ function bubbleChart(){
 
       simulation.nodes(nodes)
 
-      arrangeBubbles('season_id', 'pts', 0)
+      arrangeBubbles(statX, statY, seasonZ)
     }
 
 
@@ -102,6 +106,20 @@ function bubbleChart(){
         });
   }
 
+  d3.selectAll('.season')
+    .on('click', function(){
+      if(this.id === "forward"){
+        seasonZ += 1
+        arrangeBubbles(statX, statY, seasonZ)
+      }
+      else if (seasonZ > 0){
+        seasonZ -= 1
+        arrangeBubbles(statX, statY, seasonZ)
+      }
+    })
+
+
+
   function generateScale(stat, season, range0 = 0, range1 = width){
     var keyArray = statArray(stat, season)
       return d3.scaleLinear()
@@ -109,16 +127,17 @@ function bubbleChart(){
         .range([range0, range1])     
   }
 
-    function arrangeBubbles(statX, statY, season, flag = null){
+    function arrangeBubbles(x, y, season, flag = null){
 
-    var scaleY = generateScale(statY, season)
-    var scaleX = generateScale(statX, season)
+    var scaleY = generateScale(y, season)
+    var scaleX = generateScale(x, season)
     var scaleRadius = generateScale('trueShooting', season, 10, 30)
     var scaleColor = generateScale('fg_pct', season, 0, 1)
 
+    //place transition here
     players
       .attr('r', function(d){
-        return scaleRadius(d.statistics[season].trueShooting)
+        return scaleRadius(d.statistics[season].trueShooting) //radius is not working
       })
       .attr('fill', function(d){
         return d3.interpolateReds(scaleColor(d.statistics[season].fg_pct))
@@ -128,10 +147,10 @@ function bubbleChart(){
       
     simulation
       .force('x', d3.forceX().strength(forceStrength).x(function(d){
-        return (scaleX(d.statistics[season][statX]))
+        return (scaleX(d.statistics[season][x]))
       }))
       .force('y', d3.forceY().strength(forceStrength).y(function(d){
-        return (scaleY(d.statistics[season][statY]))
+        return (scaleY(d.statistics[season][y]))
       }))
       .alpha(1).restart();
   }
