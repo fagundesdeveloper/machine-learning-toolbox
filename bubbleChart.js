@@ -71,10 +71,9 @@ function bubbleChart(){
       .on('mouseover', function(d){
         showDetail(d)
       }) 
-      .attr('r', 0)  //var radiusScale = d3.scaleSqrt().domain([1, 300]).range([10, 80])
+      .attr('r', 0)  
       .classed('players', true)
       .attr('stroke', function(d){
-      //    console.log(d)
         return 'black'})
       .attr('stroke-width', 2)
       .attr('fill', 'white')
@@ -85,7 +84,6 @@ function bubbleChart(){
       players.transition()
         .duration(2000)
         .attr('r', function (d){
-        //    console.log(d)
           return d.radius
         })
 
@@ -104,30 +102,33 @@ function bubbleChart(){
         });
   }
 
-  function generateScale(stat, season){
+  function generateScale(stat, season, range0 = 0, range1 = width){
     var keyArray = statArray(stat, season)
       return d3.scaleLinear()
         .domain([d3.min(keyArray), d3.max(keyArray)]) 
-        .range([0, width])     
+        .range([range0, range1])     
   }
 
-
-//y is points
-//x is age/maybe year
-//radius is stl/blk/reb/ast
-//color is percentage
-
-  function arrangeBubbles(statX, statY, season, flag = null){
+    function arrangeBubbles(statX, statY, season, flag = null){
 
     var scaleY = generateScale(statY, season)
     var scaleX = generateScale(statX, season)
+    var scaleRadius = generateScale('trueShooting', season, 10, 30)
+    var scaleColor = generateScale('fg_pct', season, 0, 1)
 
-  
+    players
+      .attr('r', function(d){
+        return scaleRadius(d.statistics[season].trueShooting)
+      })
+      .attr('fill', function(d){
+        return d3.interpolateReds(scaleColor(d.statistics[season].fg_pct))
+      })
+
     axis(scaleX, scaleY) 
       
     simulation
       .force('x', d3.forceX().strength(forceStrength).x(function(d){
-        return (scaleX(d.statistics[season][statX].substring(0, 4)))
+        return (scaleX(d.statistics[season][statX]))
       }))
       .force('y', d3.forceY().strength(forceStrength).y(function(d){
         return (scaleY(d.statistics[season][statY]))
@@ -135,17 +136,15 @@ function bubbleChart(){
       .alpha(1).restart();
   }
 
-
-
-    var axis = function axis(scaleX, scaleY){        
-      svg.append('g')
-        .attr('transform', 'translate(0,0)')
-        .call(d3.axisBottom(scaleX))
-       
-     svg.append('g')
-        .attr('transform', 'translate( ' + 50 + ',' + 50 + ')')
-        .call(d3.axisLeft(scaleY))
-      }
+  var axis = function axis(scaleX, scaleY){        
+    svg.append('g')
+      .attr('transform', 'translate(0,0)')
+      .call(d3.axisBottom(scaleX))
+     
+   svg.append('g')
+      .attr('transform', 'translate( ' + 50 + ',' + 50 + ')')
+      .call(d3.axisLeft(scaleY))
+    }
 
 
    function showDetail(d) {

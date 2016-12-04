@@ -11,6 +11,8 @@ function makepromCalls(key) {
       endjson[key.name] = d['SeasonTotalsRegularSeason'];
       for (season in endjson[key.name]){
         endjson[key.name][season].season_id = parseInt(endjson[key.name][season].season_id.substring(0, 4))
+        endjson[key.name][season].trueShooting = (endjson[key.name][season].pts / (2 * (endjson[key.name][season].fga + (0.44 * endjson[key.name][season].fta))))
+
       }
       resolve([d, key])
     })
