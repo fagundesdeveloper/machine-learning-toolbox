@@ -8,6 +8,9 @@ function bubbleChart(){
   svg = null,
   players = null
   
+  // var color = d3.scaleLinear()
+  //   .domain([10, 100])
+  //   .range(["brown", "steelblue"]);
 
   var tooltip = floatingTooltip('statistics_tt', 240);
   var center = { x: width / 2, y: height / 2 };
