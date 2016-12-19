@@ -2,12 +2,12 @@ function bubbleChart(){
   var width = screen.width,
   height = screen.height,
   nodes = [],
-  statX = "season_id", 
+  statX = "season_id",
   statY = "pts",
   seasonZ = 0,
   svg = null,
   players = null
-  
+
   // var color = d3.scaleLinear()
   //   .domain([10, 100])
   //   .range(["brown", "steelblue"]);
@@ -46,7 +46,7 @@ function bubbleChart(){
     return myNodes
   }
 
-  var curriedStat = function(data){  
+  var curriedStat = function(data){
     return function(stat, season){
       console.log(data)   //deal with player that have less than 1 season
       var arr  = []
@@ -77,8 +77,8 @@ function bubbleChart(){
       .append('circle')
       .on('mouseover', function(d){
         showDetail(d)
-      }) 
-      .attr('r', 0)  
+      })
+      .attr('r', 0)
       .classed('players', true)
       .attr('stroke', function(d){
         return 'black'})
@@ -86,7 +86,7 @@ function bubbleChart(){
       .attr('fill', 'white')
 
     players = players.merge(playersE);
- 
+
 
       players.transition()
         .duration(2000)
@@ -126,8 +126,8 @@ function bubbleChart(){
   function generateScale(stat, season, range0 = 0, range1 = width){
     var keyArray = statArray(stat, season)
       return d3.scaleLinear()
-        .domain([d3.min(keyArray), d3.max(keyArray)]) 
-        .range([range0, range1])     
+        .domain([d3.min(keyArray), d3.max(keyArray)])
+        .range([range0, range1])
   }
 
     function arrangeBubbles(x, y, season, flag = null){
@@ -140,14 +140,14 @@ function bubbleChart(){
     //place transition here
     players
       .attr('r', function(d){
-        return scaleRadius(d.statistics[season].trueShooting) //radius is not working
+        return scaleRadius(d.statistics[season].countingStats) //radius is not working
       })
       .attr('fill', function(d){
-        return d3.interpolateReds(scaleColor(d.statistics[season].fg_pct))
+        return d3.interpolateReds(scaleColor(d.statistics[season].trueShooting))
       })
 
-    axis(scaleX, scaleY) 
-      
+    axis(scaleX, scaleY)
+
     simulation
       .force('x', d3.forceX().strength(forceStrength).x(function(d){
         return (scaleX(d.statistics[season][x]))
@@ -158,11 +158,11 @@ function bubbleChart(){
       .alpha(1).restart();
   }
 
-  var axis = function axis(scaleX, scaleY){        
+  var axis = function axis(scaleX, scaleY){
     svg.append('g')
       .attr('transform', 'translate(0,0)')
       .call(d3.axisBottom(scaleX))
-     
+
    svg.append('g')
       .attr('transform', 'translate( ' + 50 + ',' + 50 + ')')
       .call(d3.axisLeft(scaleY))
@@ -189,7 +189,7 @@ function bubbleChart(){
                   '<div id="stl" class="value" onclick="arrangeBubbles(this.id, 0)"> Steals:  ' +
                   d.statistics[0].stl +
                   '</div>'
-  
+
     tooltip.showTooltip(content, d3.event);
   }
 
@@ -238,11 +238,11 @@ d3.json('playerData.json', display)
 /*
 
 {
-  put simulation and transition in this 
+  put simulation and transition in this
   and default values
 }
-     
-  
+
+
   // d3.select('#seperate').on('click', function () {
   //   // simulation
   //   //   .force('x', d3.forceX(250)) // .strength(.05) // strength is optional
@@ -334,14 +334,14 @@ let transitionTimer = d3.timer(elapsed => {
 //     return function(value = null){
 //       if (value === null){
 //         return d3.scaleLinear()
-//           .domain([d3.min(keyArray), d3.max(keyArray)]) 
-//           .range([0, width])    
+//           .domain([d3.min(keyArray), d3.max(keyArray)])
+//           .range([0, width])
 //         }
 //         else {
 //           var x = d3.scaleLinear()
-//           .domain([d3.min(keyArray), d3.max(keyArray)]) 
+//           .domain([d3.min(keyArray), d3.max(keyArray)])
 //           .range([0, width])   //change this to axis or something- should be a variable set
-        
+
 //           return x(value)
 //         }
 //     }
