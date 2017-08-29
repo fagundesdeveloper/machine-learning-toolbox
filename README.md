@@ -1,7 +1,3 @@
-# One-Shot Learning 
+# machine-learning-cookbook
 
-LSTM
-
-long short-term memory 
-
-https://www.youtube.com/watch?v=tChcZpBbTTA
+## This repository is still in development
