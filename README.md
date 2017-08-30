@@ -60,6 +60,11 @@
 
 ## Density Estimation
 
+## Ensemble Methods
+  1. Stacking 
+  2. Boosting 
+  3. Bagging
+
 ## Instance Based
   1. Self-Organizing Map (SOM)
   2. K-nearest Neighbor
