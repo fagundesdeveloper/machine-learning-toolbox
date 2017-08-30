@@ -13,12 +13,14 @@
   8. Genetic Algorithims
   9. Rule-based Machine Learning
   10. Learning Classifier systems
+  11. Anomoly Detection
   
 ## Regression 
   1. Linear Regression
   2. Generalized Linear Regression Models
   3. Least Absolute Shrinkage Scatterplot and Selection Operator 
   4. Logistic Regression
+  5. Support Vector Machine
   
 ## Dimensionality Reduction
   1. Principal Componenet Analysis (PCA)
@@ -60,7 +62,7 @@
 
 ## Instance Based
   1. Self-Organizing Map (SOM)
-  2. k-nearest Nwighbour
+  2. K-nearest Neighbor
   3. Learning Vector Quantization
   
 ## Decision Tree
