@@ -2,6 +2,14 @@
 
 ### This repository is still in development
 
+## Construction checklist
+  1. flow chart of when to use what
+  2. (on each page with child nodes) short qualitative description
+  3. (dependency chart of each topic with links to other parts, maybe colors 
+    how to approach each topic0
+  4. within each sub-category, latex equation and psuedo code of process where
+  lbrary method is used
+  
 ## Approaches
   1. Decision Tree Learning
   2. Association Rule Learning
