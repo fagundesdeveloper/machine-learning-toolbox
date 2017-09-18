@@ -74,6 +74,7 @@
   3. Bagging
 
 ## Instance Based
+## Manifold Learning 
   1. Self-Organizing Map (SOM)
   2. K-nearest Neighbor
   3. Learning Vector Quantization
