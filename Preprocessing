@@ -1,0 +1,29 @@
+1. Data Exploration
+    1. Bivariate Analysis
+        1. Two-way table
+        2. Chi-square test
+        3. Z-test/T-test
+        4. ANOVA
+2. Feature Imputation
+    1. Hot-Deck
+    2. Cold-Deck
+    3. Mean-Substition
+    4. Regresssion
+3. Feature Selection
+    1. Correlation
+    2. Dimensionality Reduction
+    2. Importance
+        1. Filter Methods
+            1. Linear Discrimination
+            2. Corelation
+            3. Chi-square
+            4. ANOVA
+        2. Wrapper Methods
+            1. Forward Selection
+            2. Backward Elimination
+            3. Recursive Feature Elimination
+            4. Genetic Algorithims
+        3. Embedded Methods
+            1. Lasso regression
+            2. Ridge Regresssion
+4. Feature Scaling
